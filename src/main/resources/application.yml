@@ -1,0 +1,59 @@
+spring:
+  jpa:
+    show-sql: false
+    hibernate:
+      format-sql: true
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL55Dialect
+  thymeleaf:
+    encoding: UTF-8
+    cache: false
+    prefix: classpath:/templates/
+  resources:
+    chain:
+      strategy:
+        content:
+          enabled: true
+          paths: /**
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      name: admin-springdata
+      url: jdbc:log4jdbc:mysql:///admin_springdata?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+      driver-class-name: net.sf.log4jdbc.DriverSpy
+      username: root
+      password: root
+      filters: stat
+      maxActive: 30
+      initialSize: 10
+      maxWait: 30000
+      minIdle: 5
+      timeBetweenEvictionRunsMillis: 18000000
+      minEvictableIdleTimeMillis: 18000000
+      maxEvictableIdleTimeMillis: 28800000
+      testWhileIdle: true
+      validationQuery: select 1
+      maxOpenPreparedStatements: 50
+logging:
+  level:
+    root: info
+    org.ramer.admin: debug
+    jdbc.resultset: off
+    jdbc.audit: off
+    jdbc.sqlonly: off
+    jdbc.sqltiming: off
+    org.springframework.boot.actuate.jdbc.DataSourceHealthIndicator: error
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    session:
+      tracking-modes: cookie,url
+      cookie:
+        http-only: true
+org:
+  ramer:
+    resource:
+      prefix: /home/ramer/Desktop/

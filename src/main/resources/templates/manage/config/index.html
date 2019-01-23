@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      layout:decorate="~{manage/layout}">
+<head>
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="/lib/bootstrap/bootstrap.min.css">
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a> <cite>系统</cite></a>
+        <a> <cite>系统参数</cite></a>
+      </span>
+        <!--<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+           href="javascript:location.replace(location.href);" title="刷新">
+            <i class="layui-icon layui-icon-refresh-3" style="line-height:30px"></i></a>-->
+    </div>
+    <div class="x-body">
+        <div class="layui-row">
+            <div class=" layui-col-md12 x-so">
+                <input type="text" id="name" placeholder="请输入参数Code或名称" autocomplete="off" class="layui-input search" >
+                <button class="layui-btn" onclick="search(this);"><i class="layui-icon">&#xe615;</i></button>
+            </div>
+        </div>
+        <xblock>
+            <button class="layui-btn" onclick="refresh();"><i class="layui-icon layui-icon-refresh-3"></i>刷新</button>
+
+            <button class="layui-btn" onclick="create();"><i class="layui-icon layui-icon-add-circle"></i>添加</button>
+
+            <button class="layui-btn" onclick="update();"><i class="layui-icon layui-icon-edit"></i>修改</button>
+
+            <button class="layui-btn" onclick="del();"><i class="layui-icon layui-icon-delete"></i>删除</button>
+        </xblock>
+        <table id="table"></table>
+    </div>
+</div>
+<div layout:fragment="script">
+    <script src="/libs/bootstrap/bootstrap.min.js"></script>
+
+    <script>
+      // 搜索
+      function search(obj)
+      {
+        $('#table').bootstrapTable('refresh', {query: {'criteria': $(obj).prev().val()}});
+      }
+
+      //刷新表
+      function refresh()
+      {
+        $('#table').bootstrapTable('refresh');
+      }
+
+      //添加参数
+      function create()
+      {
+        x_admin_show('添加', '/manage/config', 600, 400);
+      }
+
+      //修改参数
+      function update()
+      {
+        if ($('#table').bootstrapTable('getSelections').length == 1) {
+          x_admin_show('修改', '/manage/config/' + $('#table').bootstrapTable('getSelections')[0].id, 600, 400);
+        } else {
+          layer.msg('请选择一条需要修改的数据。', {icon: 2});
+        }
+      }
+
+      //删除参数
+      function del()
+      {
+
+        if ($('#table').bootstrapTable('getSelections').length == 1) {
+          layer.confirm('确认要删除吗？', {icon: 3, title: '信息'}, function() {
+            //发异步删除数据
+            $.ajax({
+              url: '/manage/config/' + $('#table').bootstrapTable('getSelections')[0].id,
+              type: 'post',
+              data: {'_method': 'delete', '_csrf': '[[${_csrf!=null?_csrf.token:null}]]'},
+              success: function(data) {
+                if (data.result == true) {
+                  //刷新表
+                  refresh();
+                  layer.msg(data.data, {icon: 1, time: 1000});
+                } else {
+                  layer.alert(data.msg, {icon: 2});
+                }
+              },
+            });
+
+          });
+        } else {
+          layer.msg('请选择一条需要删除的数据。', {icon: 2});
+        }
+
+      }
+
+      $('#table').bootstrapTable({ // 对应table标签的id
+        url: '/manage/config/list', // 获取表格数据的url
+        method: 'GET',
+        //toolbar: '#toolbar-sysperson', //工具按钮容器
+        //toolbarAlign: 'right',
+        contentType: 'application/x-www-form-urlencoded',
+        dataType: 'json',
+        singleSelect: true,//单选
+        cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
+        striped: true,  //表格显示条纹，默认为false
+        pagination: true, // 在表格底部显示分页组件，默认false
+        pageSize: 10, // 页面数据条数
+        pageList: [5, 10, 15, 20], // 设置页面可以显示的数据条数
+        pageNumber: 1, // 首页页码
+        pagination: true,//是否分页
+        sidePagination: 'server',  // 设置为服务器端分页
+        queryParams: function(params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
+          return {
+            size: params.limit,//params.limit, // 每页要显示的数据条数
+            page: (params.offset / params.limit) + 1, // 当前页
+          };
+        },
+          /* sortName: 'name', // 要排序的字段
+           sortOrder: 'desc', // 排序规则 */
+        columns: [
+          {
+            checkbox: true,
+          }, {
+            field: 'code',
+            title: 'Code',
+            align: 'center',
+            valign: 'middle',
+          }, {
+            field: 'name',
+            title: '名称',
+            align: 'center',
+            valign: 'middle',
+          }, {
+            field: 'value',
+            title: '值',
+            align: 'center',
+            valign: 'middle',
+          }, {
+            field: 'remark',
+            title: '备注',
+            align: 'center',
+            valign: 'middle',
+          },
+        ],
+        responseHandler: function(res) {
+          return {total: res.data.totalElements, rows: res.data.content};
+        },
+        onLoadSuccess: function() {  //加载成功时执行
+          //禁用全选
+          //$("input[name='btSelectAll']").attr("hidden", "true");
+
+        },
+        onLoadError: function() {  //加载失败时执行
+        },
+
+        //单击选中
+        onClickRow: function(row, $element) {
+          $($element.children()[0]).children().click();
+        },
+
+      });
+
+      layui.use('laydate', function() {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#start', //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#end', //指定元素
+        });
+      });
+
+
+    </script>
+
+
+</div>
+</body>
+
+</html>

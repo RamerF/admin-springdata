@@ -1,0 +1,89 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>[[${title}]]</title>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
+    <link rel="stylesheet" href="/xadmin/css/font.css">
+    <link rel="stylesheet" href="/xadmin/css/xadmin.css">
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+    <script src="/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/xadmin/script/xadmin.js"></script>
+
+</head>
+<body class="login-bg">
+
+<div class="login layui-anim layui-anim-up">
+    <div class="message">登录</div>
+    <div id="darkbannerwrap"></div>
+
+    <form method="post" class="layui-form">
+        <input th:if="${_csrf!=null}"
+               type="hidden"
+               th:name="${_csrf.parameterName}"
+               id="_csrf"
+               th:value="${_csrf.token}"/>
+        <input name="username" placeholder="用户名" type="text" lay-verify="required" class="layui-input">
+        <hr class="hr15">
+        <input name="password" lay-verify="required" placeholder="密码" type="password" class="layui-input">
+        <hr class="hr15">
+        <input value="登录" lay-submit lay-filter="login" style="width:100%;" type="submit">
+        <hr class="hr20">
+    </form>
+</div>
+
+<!--登陆过期整个页面跳转登录页-->
+<script language="javascript">
+  if (top != window)
+    top.location.href = window.location.href;
+</script>
+<script>
+  $(function() {
+    layui.use('form', function() {
+      var form = layui.form;
+      form.on('submit(login)', function(data) {
+        $($('form>input')[3]).attr('disabled', 'disabled');
+        layer.msg('正在登陆，请稍后。');
+        $.ajax({
+          url: '/manage/login',
+          type: 'POST',
+          data: {
+            username: data.field.username,
+            password: data.field.password,
+            '_csrf': $('#_csrf').val(),
+          },
+          success: function(result) {
+            if (result.result == true) {
+              window.location.href = '/manage/index';
+            } else {
+              layer.msg(result.msg);
+            }
+            $($('form>input')[3]).removeAttr('disabled');
+          },
+          error: function(result) {
+            console.log(result.responseJSON.msg);
+            layer.msg(result.responseJSON.msg);
+            if (result.status == 403) {
+              window.location.reload();
+            }
+            $($('form>input')[3]).removeAttr('disabled');
+          },
+        });
+        return false;
+      });
+    });
+  });
+
+
+</script>
+
+
+<!-- 底部结束 -->
+</body>
+</html>

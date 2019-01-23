@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      layout:decorate="~{manage/layout}">
+
+<head>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="x-body layui-anim layui-anim-up">
+        <form class="layui-form">
+            <input th:if="${_csrf!=null}" type="hidden"
+                   th:name="${_csrf.parameterName}"
+                   id="_csrf"
+                   th:value="${_csrf.token}"/>
+            <div class="layui-form-item" hidden="hidden">
+                <label for="L_id" class="layui-form-label">
+                    id
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_id" name="id" required="true" lay-verify="id"
+                           autocomplete="off" class="layui-input" th:value="${manager.id}" disabled="disabled">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_empNo" class="layui-form-label">
+                    工号
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_empNo" name="empNo" required="true" lay-verify="empNo"
+                           autocomplete="off" class="layui-input" th:value="${manager.empNo}" disabled="disabled">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_password" class="layui-form-label">
+                    密码
+                </label>
+                <div class="layui-input-inline">
+                    <input type="password" id="L_password" name="password" required="false" lay-verify="password"
+                           autocomplete="off" class="layui-input" value="     ">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_name" class="layui-form-label">
+                    姓名
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_name" name="name" required="true" lay-verify="name"
+                           autocomplete="off" class="layui-input" th:value="${manager.name}">
+                </div>
+            </div>
+            <!--<div class="layui-form-item">
+                <label for="L_gender" class="layui-form-label">
+                    性别
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_gender" name="gender" required="false" lay-verify="gender"
+                           autocomplete="off" class="layui-input" th:value="${manager.gender}">
+                </div>
+            </div>-->
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    性别
+                </label>
+                <div class="layui-input-block">
+                    <input type="radio" name="gender" value="1" title="男"
+                           th:checked="${manager.gender == 1?'checked':'false'}">
+                    <div class="layui-unselect layui-form-radio layui-form-radioed"><i
+                            class="layui-anim layui-icon layui-anim-scaleSpring"></i>
+                        <div>男</div>
+                    </div>
+                    <input type="radio" name="gender" value="0" title="女"
+                           th:checked="${manager.gender == 0?'checked':'false'}">
+                    <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i>
+                        <div>女</div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_phone" class="layui-form-label">
+                    电话
+                </label>
+                <div class="layui-input-inline">
+                    <input type="number" id="L_phone" name="phone" required="false" lay-verify="phone"
+                           autocomplete="off" class="layui-input" th:value="${manager.phone}">
+                </div>
+            </div>
+            <div class="layui-form-item" pane="" th:if="not ${#lists.isEmpty(roleses)}">
+                <label class="layui-form-label">
+                    分配角色
+                </label>
+                <div class="layui-input-block roleses">
+                    <input th:each="r:${roleses}" type="checkbox"
+                           name="like1[roles]" lay-filter="roleses" lay-skin="primary" th:value="${r.id}"
+                           th:title="${r.name}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                </label>
+                <button class="layui-btn" lay-filter="add" lay-submit="">
+                    确定
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<div layout:fragment="script">
+    <script th:inline="javascript">
+      // <![CDATA[
+      var selectedRolesIds = /*[[${selectedRolesIds}]]*/;
+
+      //获取已经点击的
+      for (var i = 0; i < selectedRolesIds.length; i++) {
+        for (var j = 0; j < $(".roleses input").length; j++) {
+          if (selectedRolesIds[i] == $('.roleses input:eq(' + j + ')').val()) {
+            $('.roleses input:eq(' + j + ')').prop('checked', true);
+          }
+        }
+      }
+
+      //password input 聚焦时清空
+      $('#L_password').focus(function() {
+        $(this).val('');
+      });
+
+      layui.use(['form', 'layer'], function() {
+        $ = layui.jquery;
+        var form = layui.form;
+        var layer = layui.layer;
+
+        //自定义验证规则
+        form.verify({
+          gender: function(value) {
+            if (value.length < 1) {
+              return '请选择性别';
+            }
+          },
+        });
+
+        //监听提交
+        form.on('submit(add)', function(data) {
+          data.field['_method'] = 'put';
+          var gender = $('.layui-input-block input:radio:checked').val();
+          data.field['gender'] = gender;
+          var pwd = data.field['password'];
+          if (pwd.trim().length === 0) {
+            data.field['password'] = null;
+          }
+          var roleses = [];
+          $.each($('.roleses input:checked'), function(index, val) {
+            roleses.push($(val).val());
+          });
+          data.field['roleIds'] = roleses;
+          $.ajax({
+            url: '/manage/manager/' + data.field.id,
+            type: 'post',
+            data: data.field,
+            success: function(data) {
+              if (data.result == true) {
+                //刷新表
+                window.parent.refresh();
+
+                layer.alert(data.msg, {icon: 1}, function() {
+                  // 获得frame索引
+                  var index = parent.layer.getFrameIndex(window.name);
+                  //关闭当前frame
+                  parent.layer.close(index);
+                });
+              } else {
+                layer.alert(data.msg, {icon: 2});
+              }
+            },
+          });
+          return false;
+        });
+
+      });
+      // ]]>
+    </script>
+</div>
+</body>
+
+</html>
+<!--TODO: 错误
+    1.更新管理员的时候,性别为00或者0或者01或者1的时候会提示:
+    /* {
+    "result": false,
+    "data": null,
+    "msg": "更新失败,数据格式异常"
+    }
+-->

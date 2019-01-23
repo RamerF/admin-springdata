@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      layout:decorate="~{manage/layout}">
+<head>
+    <title>[[${site.title}]]</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <!-- 顶部开始
+    <div class="container">
+        <div class="logo"><a href="/manage/index" th:inline="text">[[${site.name}]]</a></div>
+        <div class="left_open">
+            <i title="展开左侧栏" class="iconfont">&#xe699;</i>
+        </div>
+        <ul class="layui-nav right" lay-filter="">
+            <li class="layui-nav-item">
+                <a sec:authorize="hasRole('ROLE_USER')" th:text="${session.manager.name}"></a>
+                <dl class="layui-nav-child">  二级菜单
+                    <dd><a onclick="x_admin_show('个人信息','http://www.baidu.com')">个人信息</a></dd>
+                    <dd><a onclick="x_admin_show('切换帐号','http://www.baidu.com')">切换帐号</a></dd>
+                    <dd><a href="/logout">退出</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item to-index"><a href="/index">前台首页</a></li>
+        </ul>
+
+    </div>
+     顶部结束 -->
+    <!-- 顶部开始 -->
+    <div class="container">
+        <div class="logo"><a href="./index">[[${site.name}]]</a></div>
+        <div class="left_open">
+            <i title="展开左侧栏" class="iconfont">&#xe699;</i>
+        </div>
+        <ul class="layui-nav right" lay-filter="">
+            <li class="layui-nav-item">
+                <a sec:authorize="hasAnyAuthority('global:*','manager:view')" th:text="${session.manager.name}"></a>
+                <dl class="layui-nav-child"> <!-- 二级菜单 -->
+                    <!--<dd><a onclick="x_admin_show('个人信息','http://www.baidu.com')">个人信息</a></dd>-->
+                    <!--<dd><a onclick="x_admin_show('切换帐号','http://www.baidu.com')">切换帐号</a></dd>-->
+                    <dd><a href="/manage/logout">退出</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item to-index"><a href="/">首页</a></li>
+        </ul>
+
+    </div>
+    <!-- 顶部结束 -->
+    <!-- 中部开始 -->
+    <!-- 左侧菜单开始 -->
+    <div class="left-nav">
+        <div id="side-nav">
+            <ul id="nav" th:inline="text">
+                <li th:each="m:${menus}">
+                    <a th:attr="_href=${m.url}">
+                        <i th:class=" ${'layui-icon ' + m.icon}"></i>
+                        <cite th:text="${m.name}"></cite>
+                        <i th:if="not ${#lists.isEmpty(m.children)}" class="iconfont nav_right">&#xe697;</i>
+                    </a>
+                    <ul class="sub-menu" th:if="not ${#lists.isEmpty(m.children)}"
+                        th:include="this::retrieveChild(${m.children})"></ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <th:block th:fragment="retrieveChild(children)">
+        <th:block th:each="c:${children}">
+            <li>
+                <a th:attr="_href=${c.url}">
+                    <i class="iconfont">&#xe6a7;</i>
+                    <cite th:text="${c.name}"></cite>
+                    <i th:if="not ${#lists.isEmpty(c.children)}" class="iconfont nav_right">&#xe697;</i>
+                </a>
+                <ul class="sub-menu" th:if="not ${#lists.isEmpty(c.children)}"
+                    th:include="this::retrieveChild(${c.children})"></ul>
+            </li>
+        </th:block>
+    </th:block>
+    <!-- <div class="x-slide_left"></div> -->
+    <!-- 左侧菜单结束 -->
+    <!-- 右侧主体开始 -->
+    <div class="page-content">
+        <div class="layui-tab tab" lay-filter="xbs_tab" lay-allowclose="false">
+            <ul class="layui-tab-title">
+                <li class="home"><i class="layui-icon layui-icon-home"></i>首页</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <iframe src='/manage/welcome' frameborder="0" scrolling="yes" class="x-iframe"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-content-bg"></div>
+    <!-- 右侧主体结束 -->
+    <!-- 中部结束 -->
+    <!-- 底部开始 -->
+    <div class="footer">
+        <div class="copyright" th:inline="text">[[${site.copyright}]]</div>
+    </div>
+    <!-- 底部结束 -->
+</div>
+<div layout:fragment="script">
+    <script th:inline="javascript">
+      // <![CDATA[
+      var menus = /*[[${menus}]]*/;
+      // ]]>
+      window.onload = function() {
+        $('#nav li:eq(0)').click();
+      };
+
+    </script>
+</div>
+</body>
+</html>

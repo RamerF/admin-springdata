@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Unauthorized</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" th:href="@{/style/error_page.css}"/>
+</head>
+<body>
+<div class="wrap">
+    <div class="logo">
+        <img src="/images/401.png"/>
+        <p>未授权，请先验证身份！</p>
+        <p>Unauthorized, please verify identity first.</p>
+        <a th:href="${session.manager != null ? '/manage/index':'/index'}">返回主页</a>
+    </div>
+</div>
+</body>
+</html>

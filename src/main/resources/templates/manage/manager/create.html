@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      layout:decorate="~{manage/layout}">
+<head>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="x-body layui-anim layui-anim-up">
+        <form class="layui-form">
+            <input th:if="${_csrf!=null}" type="hidden"
+                   th:name="${_csrf.parameterName}"
+                   id="_csrf"
+                   th:value="${_csrf.token}"/>
+            <div class="layui-form-item">
+                <label for="L_empNo" class="layui-form-label">
+                    <span class="x-red">*</span>工号
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_empNo" name="empNo" required="true" lay-verify="empNo"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_password" class="layui-form-label">
+                    <span class="x-red">*</span>密码
+                </label>
+                <div class="layui-input-inline">
+                    <input type="password" id="L_password" name="password" required="true" lay-verify="password"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_name" class="layui-form-label">
+                    <span class="x-red">*</span>姓名
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_name" name="name" required="true" lay-verify="name"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    性别
+                </label>
+                <div class="layui-input-block">
+                    <input type="radio" name="gender" value="1" title="男" checked="">
+                    <div class="layui-unselect layui-form-radio layui-form-radioed"><i
+                            class="layui-anim layui-icon layui-anim-scaleSpring"></i>
+                        <div>男</div>
+                    </div>
+                    <input type="radio" name="gender" value="0" title="女">
+                    <div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i>
+                        <div>女</div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <label for="L_phone" class="layui-form-label">
+                    <span class="x-red">*</span>电话号码
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_phone" name="phone" required="false" lay-verify="phone"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item" pane="" th:if="not ${#lists.isEmpty(roleses)}">
+                <label class="layui-form-label">
+                    分配角色
+                </label>
+                <div class="layui-input-block roleses">
+                    <input th:each="r:${roleses}" type="checkbox"
+                           name="like1[roles]" lay-filter="roleses" lay-skin="primary" th:value="${r.id}"
+                           th:title="${r.name}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                </label>
+                <button class="layui-btn" lay-filter="add" lay-submit="">
+                    增加
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<div layout:fragment="script">
+    <link rel="stylesheet" th:href="@{/style/manage/manager/manager.css}">
+    <script>
+
+
+      layui.use(['form', 'layer'], function() {
+        $ = layui.jquery;
+        var form = layui.form
+            , layer = layui.layer;
+
+        //自定义验证规则
+        form.verify({
+          empNo: [/(.+){5,25}$/, '工号必须5到25位字符之间'],
+          password: [/^[a-zA-Z]\w{5,17}$/, '以字母开头，长度在6~18之间，只能包含字符、数字和下划线'],
+          name: [/(.+){1,25}$/, '姓名必须5到25位字符之间'],
+          phone: [/(.+){8,11}$/, '电话号码必须8到11位字符之间'],
+        });
+
+        //监听提交
+        form.on('submit(add)', function(data) {
+          data.field['_method'] = 'post';
+          var roleses = [];
+          $.each($('.roleses input:checked'), function(index, val) {
+            roleses.push($(val).val());
+          });
+          data.field['roleIds'] = roleses;
+          $.ajax({
+            url: '/manage/manager',
+            type: 'post',
+            data: data.field,
+            success: function(data) {
+              if (data.result == true) {
+                //刷新表
+                window.parent.refresh();
+                layer.alert(data.msg, {icon: 1}, function() {
+
+                  $(this).blur();
+                  // 获得frame索引
+                  var index = parent.layer.getFrameIndex(window.name);
+                  //关闭当前frame
+                  parent.layer.close(index);
+                });
+              } else {
+                layer.alert(data.msg, {icon: 2});
+              }
+            },
+
+          });
+
+          return false;
+        });
+
+      });
+    </script>
+</div>
+</body>
+
+</html>

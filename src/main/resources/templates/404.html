@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Not Found</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" th:href="@{/style/error_page.css}"/>
+</head>
+<body>
+<div class="wrap">
+    <div class="logo">
+        <img src="/images/404.png"/>
+        <p>你访问的页面域名不存在！</p>
+        <p>The page you visited did not exist.</p>
+        <a onclick="returnIndex();">返回主页</a>
+    </div>
+</div>
+</body>
+<script>
+    function returnIndex() {
+        if ([[${session.manager!=null}]]){
+            //管理员返回主页
+            top.location.href ="/manage/index";
+        } else {
+            //其他返回主页
+            top.location.href ="/index";
+        }
+    }
+</script>
+</html>

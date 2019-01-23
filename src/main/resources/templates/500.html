@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Internal Server Error</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" th:href="@{/style/error_page.css}"/>
+</head>
+<body>
+<div class="wrap">
+    <div class="logo">
+        <img src="/images/500.png"/>
+        <p>服务器遇到错误，无法完成请求。</p>
+        <p>Server error, unable to complete request.</p>
+        <a onclick="returnIndex();">返回主页</a>
+    </div>
+</div>
+<script>
+  function returnIndex() {
+    if ([[${session.manager!=null}]]){
+      //管理员返回主页
+      top.location.href ="/manage/index";
+    } else {
+      //其他返回主页
+      top.location.href ="/index";
+    }
+  }
+</script>
+</body>
+</html>

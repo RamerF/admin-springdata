@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org"
+      layout:decorate="~{base_layout}">
+<head>
+    <meta charset="UTF-8"/>
+    <title></title>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="shortcut icon" href="https://www.thymeleaf.org/doc/images/favicon.ico" type="image/x-icon"/>
+    <link rel="stylesheet" th:href="@{/xadmin/css/font.css}">
+    <link rel="stylesheet" th:href="@{/xadmin/css/xadmin.css}">
+
+    <!-- DataTables -->
+    <link rel="stylesheet" href="/lib/bootstrap-table/bootstrap-table.css"/>
+    <link rel="stylesheet" href="/lib/style/style.css"/>
+    <script type="text/javascript" th:src="@{/xadmin/script/xadmin.js}"></script>
+</head>
+<body layout:fragment="container">
+<div layout:fragment="content">
+</div>
+<script src="/lib/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="/lib/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+<!--通用工具方法-->
+<script src="/lib/utils/common-util.js"></script>
+<div layout:fragment="script"></div>
+</body>
+</html>

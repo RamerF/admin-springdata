@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      layout:decorate="~{manage/layout}">
+
+<head>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="x-body layui-anim layui-anim-up">
+        <form class="layui-form">
+            <input th:if="${_csrf!=null}" type="hidden"
+                   th:name="${_csrf.parameterName}"
+                   id="_csrf"
+                   th:value="${_csrf.token}"/>
+            <div class="layui-form-item" hidden="hidden">
+                <label for="L_id" class="layui-form-label">
+                    id
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_id" name="id" required="true" lay-verify="id"
+                           autocomplete="off" class="layui-input" th:value="${config.id}" disabled="disabled">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_code" class="layui-form-label">
+                    Code
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_code" name="code" required="true" lay-verify="code"
+                           autocomplete="off" class="layui-input" th:value="${config.code}" disabled="disabled">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_name" class="layui-form-label">
+                    <span class="x-red">*</span>名称
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_name" name="name" required="true" lay-verify="name"
+                           autocomplete="off" class="layui-input" th:value="${config.name}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_value" class="layui-form-label">
+                    <span class="x-red">*</span>值
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_value" name="value" required="true" lay-verify="value"
+                           autocomplete="off" class="layui-input" th:value="${config.value}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_remark" class="layui-form-label">
+                    备注
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_remark" name="remark" required="false" lay-verify="remark"
+                           autocomplete="off" class="layui-input" th:value="${config.remark}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                </label>
+                <button class="layui-btn" lay-filter="add" lay-submit="">
+                    确定
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<div layout:fragment="script">
+    <script>
+
+      layui.use(['form', 'layer'], function() {
+        $ = layui.jquery;
+        var form = layui.form
+            , layer = layui.layer;
+
+        //自定义验证规则
+        form.verify({
+          code: function(value) {
+            if (value.length < 1) {
+              return '请输入Code';
+            }
+          },
+          name: function(value) {
+            if (value.length < 1) {
+              return '请输入名称';
+            }
+          },
+          value: function(value) {
+            if (value.length < 1) {
+              return '请输入值';
+            }
+          },
+          //, name: [/(.+){6,12}$/, '密码必须6到12位']
+        });
+
+        //监听提交
+        form.on('submit(add)', function(data) {
+          data.field['_method'] = 'put';
+          console.log(data.field);
+          $.ajax({
+            url: '/manage/config/' + data.field.id,
+            type: 'post',
+            data: data.field,
+            success: function(data) {
+              if (data.result == true) {
+                //刷新表
+                window.parent.refresh();
+
+                layer.alert(data.msg, {icon: 1}, function() {
+                  // 获得frame索引
+                  var index = parent.layer.getFrameIndex(window.name);
+                  //关闭当前frame
+                  parent.layer.close(index);
+                });
+              } else {
+                layer.alert(data.msg, {icon: 2});
+              }
+            },
+          });
+          return false;
+        });
+
+      });
+    </script>
+</div>
+</body>
+
+</html>

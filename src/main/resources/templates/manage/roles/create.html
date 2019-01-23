@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      layout:decorate="~{manage/layout}">
+
+<head>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="x-body layui-anim layui-anim-up">
+        <form class="layui-form">
+            <input th:if="${_csrf!=null}" type="hidden"
+                   th:name="${_csrf.parameterName}"
+                   id="_csrf"
+                   th:value="${_csrf.token}"/>
+            <div class="layui-form-item">
+                <label for="L_name" class="layui-form-label">
+                    <span class="x-red">*</span>角色名称
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_name" name="name" required="true" lay-verify="name"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item" pane="">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>菜单
+                </label>
+                <div class="layui-input-block menu">
+                    <input th:each="m:${menus}" type="checkbox" th:data-pid="${m.parent!=null?m.parent.id:''}"
+                           name="like1[menus]" lay-filter="menu" lay-skin="primary" th:value="${m.id}"
+                           th:title="${m.name}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_privileges" class="layui-form-label">
+                    <span class="x-red">*</span>权限
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_privileges" name="privilegeIds" required="false" autocomplete="off"
+                           class="layui-input">
+                </div>
+                <div class="privileges-box">
+                    <div class="privileges-input">
+                    </div>
+                    <a href="Javascript:void(0)">确定</a>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_remark" class="layui-form-label">
+                    备注
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_remark" name="remark" required="false" lay-verify="remark"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                </label>
+                <button class="layui-btn" lay-filter="add" lay-submit="">
+                    增加
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<div layout:fragment="script">
+    <link rel="stylesheet" th:href="@{/style/manage/roles/roles.css}">
+    <script th:inline="javascript">
+      // <![CDATA[
+      var privileges = /*[[${privileges}]]*/;
+      // ]]>
+
+      $(function() {
+        var category = [];
+        for (var i = 0; i < privileges.length; i++) {
+          if (!category.includes(privileges[i].exp.substring(0, privileges[i].exp.indexOf(':')))) {
+            category.push(privileges[i].exp.substring(0, privileges[i].exp.indexOf(':')));
+          }
+        }
+        for (var i = 0; i < category.length; i++) {
+          var divNode = $('<div class="layui-input-block"></div>');
+          for (var j = 0; j < privileges.length; j++) {
+            if (category[i] == privileges[j].exp.substring(0, privileges[j].exp.indexOf(':'))) {
+              var inputNode = $(
+                  '<input type=\'checkbox\' name=\'like1[alia]\' lay-skin=\'primary\' value=\'' + privileges[j].id +
+                  '\' title=\'' + privileges[j].remark + '\'>');
+              divNode.append(inputNode);
+            }
+          }
+          $('.privileges-box .privileges-input').append(divNode);
+        }
+
+        $('#L_privileges').on('click', function() {
+          $('.privileges-box').fadeIn();
+          return false;
+        });
+        var privilegeIds = [];
+        $('.privileges-box a').on('click', function() {
+          var privilegeJson = {};
+          var id, remark;
+          $.each($('.privileges-box .privileges-input input:checkbox:checked'), function(index, val) {
+            id = $(val).val();
+            remark = $(val).attr('title');
+            privilegeJson[id] = remark;
+          });
+          var privilegeName = '';
+          for (var i in privilegeJson) {
+            if (privilegeName == '') {
+              privilegeName += privilegeJson[i];
+            } else {
+              privilegeName += ',' + privilegeJson[i];
+            }
+            privilegeIds.push(i);
+          }
+          $('#L_privileges').val(privilegeName);
+          $('.privileges-box').fadeOut();
+        });
+
+        layui.use(['form', 'layer'], function() {
+          $ = layui.jquery;
+          var form = layui.form
+              , layer = layui.layer;
+
+          //点击子菜单自动选中父菜单
+          form.on('checkbox(menu)', function(data) {
+            var pid = $(data.elem).attr('data-pid');
+            while (typeof (pid = doChecked(pid)) != 'undefined') {
+            }
+
+            function doChecked(pid)
+            {
+              var prev;
+              for (var i = 0; i < $(".layui-form-item .menu input").length; i++) {
+                if (pid == $('.layui-form-item .menu input:eq(' + i + ')').val()) {
+                  if ($('.layui-form-item .menu .layui-form-checkbox:eq(' + i + ')').hasClass('layui-form-checked')) {
+                    prev = $('.layui-form-item .menu input:eq(' + i + ')').attr('data-pid');
+                    break;
+                  }
+                  $('.layui-form-item .menu input:eq(' + i + ')').prop('checked', true);
+                  $('.layui-form-item .menu .layui-form-checkbox:eq(' + i + ')').addClass('layui-form-checked');
+                  prev = $('.layui-form-item .menu input:eq(' + i + ')').attr('data-pid');
+                  break;
+                }
+              }
+              return prev;
+            }
+          });
+
+          //自定义验证规则
+          form.verify({
+            sort: function(value) {
+              if (value.length < 1) {
+                return '请输入序列';
+              }
+            },
+            name: function(value) {
+              if (value.length < 1) {
+                return '请输入菜单名称';
+              }
+            },
+            alia: function(value) {
+              if (value.length < 1) {
+                return '请输入权限别名';
+              }
+            },
+            //, name: [/(.+){6,12}$/, '密码必须6到12位']
+          });
+
+          //监听提交
+          form.on('submit(add)', function(data) {
+            data.field['_method'] = 'post';
+            data.field['privilegeIds'] = privilegeIds;
+            var menuIds = [];
+            $.each($('.menu input:checked'), function(index, val) {
+              menuIds.push($(val).val());
+            });
+            data.field['menuIds'] = menuIds;
+            $.ajax({
+              url: '/manage/roles',
+              type: 'post',
+              data: data.field,
+              success: function(data) {
+                if (data.result == true) {
+                  //刷新表
+                  window.parent.refresh();
+                  layer.alert(data.msg, {icon: 1}, function() {
+
+                    $(this).blur();
+                    // 获得frame索引
+                    var index = parent.layer.getFrameIndex(window.name);
+                    //关闭当前frame
+                    parent.layer.close(index);
+                    top.location.href ="/manage/index";
+                  });
+                } else {
+                  layer.alert(data.msg, {icon: 2});
+                }
+              },
+
+            });
+
+            return false;
+          });
+
+        });
+
+      });
+    </script>
+</div>
+</body>
+
+</html>
+<!--TODO: 错误
+    1.添加时menuIds[]或者privilegeIds[]不管填的是否正确都会报400的错
+<!--&ndash;&gt;-->
