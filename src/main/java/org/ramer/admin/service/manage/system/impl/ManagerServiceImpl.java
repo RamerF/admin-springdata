@@ -43,6 +43,7 @@ public class ManagerServiceImpl implements ManagerService {
   @Transactional
   @Override
   public synchronized Manager update(Manager manager, List<Long> roleIds) {
+    // TODO-WARN: 调用update方法
     Manager m = repository.findByIdAndState(manager.getId(), Constant.STATE_ON);
     if (m == null) {
       return null;
@@ -179,6 +180,7 @@ public class ManagerServiceImpl implements ManagerService {
   @Transactional
   @Override
   public synchronized Manager update(Manager manager) {
+    // TODO-WARN: 这里调用写反了,应该是其他地方调用这个方法
     return update(
         manager,
         Optional.ofNullable(manager.getRoleses()).orElseGet(ArrayList::new).stream()
