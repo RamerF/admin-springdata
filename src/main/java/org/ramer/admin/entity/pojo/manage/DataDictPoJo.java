@@ -1,8 +1,11 @@
 package org.ramer.admin.entity.pojo.manage;
 
+import java.util.Objects;
 import lombok.*;
+import org.ramer.admin.entity.AbstractEntity;
 import org.ramer.admin.entity.domain.manage.DataDict;
 import org.ramer.admin.entity.pojo.AbstractEntityPoJo;
+import org.springframework.beans.BeanUtils;
 
 /** 系统数据字典. */
 @Data
@@ -14,16 +17,18 @@ public class DataDictPoJo extends AbstractEntityPoJo {
   private String code;
   private String remark;
 
-  public static DataDictPoJo of(DataDict dataDict) {
+  @Override
+  @SuppressWarnings({"unchecked"})
+  public <E extends AbstractEntity, T extends AbstractEntityPoJo> T of(E entity, Class<T> clazz) {
+    if (Objects.isNull(entity)) {
+      return null;
+    }
+    DataDict dataDict = (DataDict) entity;
     DataDictPoJo poJo = new DataDictPoJo();
     if (dataDict.getDataDictType() != null) {
       poJo.setDataDictTypeId(dataDict.getDataDictType().getId());
     }
-    poJo.setName(dataDict.getName());
-    poJo.setCode(dataDict.getCode());
-    poJo.setRemark(dataDict.getRemark());
-
-    AbstractEntityPoJo.of(poJo, dataDict);
-    return poJo;
+    BeanUtils.copyProperties(dataDict, poJo);
+    return (T) poJo;
   }
 }

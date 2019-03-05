@@ -1,7 +1,6 @@
 package org.ramer.admin.entity.pojo.manage;
 
 import lombok.*;
-import org.ramer.admin.entity.domain.manage.Privilege;
 import org.ramer.admin.entity.pojo.AbstractEntityPoJo;
 
 /** 系统数据字典 */
@@ -14,16 +13,4 @@ public class PrivilegePoJo extends AbstractEntityPoJo {
   private String exp;
 
   private String remark;
-
-  public static PrivilegePoJo of(Privilege privilege) {
-    if (privilege == null) {
-      return null;
-    }
-    PrivilegePoJo poJo = new PrivilegePoJo();
-    poJo.setExp(privilege.getExp());
-    poJo.setRemark(privilege.getRemark());
-
-    AbstractEntityPoJo.of(poJo, privilege);
-    return poJo;
-  }
 }

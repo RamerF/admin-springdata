@@ -1,9 +1,12 @@
 package org.ramer.admin.entity.pojo.manage;
 
 import java.util.Date;
+import java.util.Objects;
 import lombok.*;
+import org.ramer.admin.entity.AbstractEntity;
 import org.ramer.admin.entity.domain.manage.Menu;
 import org.ramer.admin.entity.pojo.AbstractEntityPoJo;
+import org.springframework.beans.BeanUtils;
 
 /** @author ramer */
 @Data
@@ -42,19 +45,19 @@ public final class MenuPoJo extends AbstractEntityPoJo {
     setUpdateTime(updateTime);
   }
 
-  public static MenuPoJo of(Menu menu) {
+  @Override
+  @SuppressWarnings({"unchecked"})
+  public <E extends AbstractEntity, T extends AbstractEntityPoJo> T of(E entity, Class<T> clazz) {
+    if (Objects.isNull(entity)) {
+      return null;
+    }
+    Menu menu = (Menu) entity;
     MenuPoJo poJo = new MenuPoJo();
-    poJo.setIcon(menu.getIcon());
-    poJo.setLeaf(menu.getLeaf());
-    poJo.setName(menu.getName());
     if (menu.getParent() != null) {
       poJo.setPId(menu.getParent().getId());
       poJo.setPName(menu.getParent().getName());
     }
-    poJo.setSort(menu.getSort());
-    poJo.setUrl(menu.getUrl());
-
-    AbstractEntityPoJo.of(poJo, menu);
-    return poJo;
+    BeanUtils.copyProperties(menu, poJo);
+    return (T) poJo;
   }
 }

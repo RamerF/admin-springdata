@@ -1,6 +1,7 @@
 package org.ramer.admin.entity.pojo;
 
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.MappedSuperclass;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,6 +35,9 @@ public abstract class AbstractEntityPoJo {
   }
 
   public <E extends AbstractEntity, T extends AbstractEntityPoJo> T of(E entity, Class<T> clazz) {
+    if (Objects.isNull(entity)) {
+      return null;
+    }
     T poJo;
     try {
       poJo = clazz.newInstance();
