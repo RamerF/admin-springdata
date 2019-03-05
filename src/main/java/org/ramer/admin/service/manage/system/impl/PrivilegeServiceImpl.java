@@ -64,11 +64,6 @@ public class PrivilegeServiceImpl implements PrivilegeService {
   }
 
   @Override
-  public Privilege getPoJoById(final long id) {
-    return getById(id);
-  }
-
-  @Override
   public Privilege getById(final long id) {
     return repository.findById(id).orElse(null);
   }

@@ -1,6 +1,7 @@
 package org.ramer.admin.controller.manage;
 
 import org.ramer.admin.entity.domain.manage.Config;
+import org.ramer.admin.entity.pojo.manage.ConfigPoJo;
 import org.ramer.admin.entity.response.CommonResponse;
 import org.ramer.admin.service.common.CommonService;
 import org.ramer.admin.service.manage.system.ConfigService;
@@ -69,7 +70,8 @@ public class ConfigController {
   @GetMapping("/{id}")
   @ApiOperation("更新系统参数页面")
   String update(@PathVariable("id") String idStr, Map<String, Object> map) throws Exception {
-    return commonService.update(service, idStr, "/manage/config/update", map, "config");
+    return commonService.update(
+        service, ConfigPoJo.class, idStr, "manage/config/update", map, "config");
   }
 
   @PutMapping("/{id}")

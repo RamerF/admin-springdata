@@ -1,5 +1,11 @@
 package org.ramer.admin.service.manage.system.impl;
 
+import java.util.*;
+import java.util.stream.Collectors;
+import javax.annotation.Resource;
+import javax.transaction.Transactional;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.ramer.admin.entity.AbstractEntity;
 import org.ramer.admin.entity.Constant;
 import org.ramer.admin.entity.domain.manage.Manager;
@@ -8,12 +14,6 @@ import org.ramer.admin.repository.manage.ManagerRepository;
 import org.ramer.admin.service.manage.system.ManagerService;
 import org.ramer.admin.util.EncryptUtil;
 import org.ramer.admin.util.TextUtil;
-import java.util.*;
-import java.util.stream.Collectors;
-import javax.annotation.Resource;
-import javax.transaction.Transactional;
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -135,17 +135,6 @@ public class ManagerServiceImpl implements ManagerService {
   @Override
   public long count() {
     return repository.count();
-  }
-
-  @Override
-  public Manager getPoJoById(long id) {
-    return Optional.ofNullable(getById(id))
-        .map(
-            manager -> {
-              manager.setRoleses(null);
-              return manager;
-            })
-        .orElse(null);
   }
 
   @Override

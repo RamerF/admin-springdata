@@ -12,6 +12,7 @@ import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.ramer.admin.entity.AbstractEntity;
 import org.ramer.admin.entity.domain.manage.Manager;
+import org.ramer.admin.entity.pojo.manage.ManagerPoJo;
 import org.ramer.admin.entity.response.CommonResponse;
 import org.ramer.admin.exception.CommonException;
 import org.ramer.admin.service.common.CommonService;
@@ -125,7 +126,8 @@ public class ManagerController {
         Optional.ofNullable(rolesService.listByManager(id)).orElse(new ArrayList<>()).stream()
             .map(AbstractEntity::getId)
             .collect(Collectors.toList()));
-    return commonService.update(service, idStr, "manage/manager/update", map, "manager");
+    return commonService.update(
+        service, ManagerPoJo.class, idStr, "manage/manager/update", map, "manager");
   }
 
   @PutMapping("/{id}")

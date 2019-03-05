@@ -1,9 +1,16 @@
 package org.ramer.admin.service.common.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.ramer.admin.entity.AbstractEntity;
 import org.ramer.admin.entity.Constant;
 import org.ramer.admin.entity.domain.manage.Manager;
+import org.ramer.admin.entity.pojo.AbstractEntityPoJo;
 import org.ramer.admin.entity.pojo.manage.MenuPoJo;
 import org.ramer.admin.entity.response.CommonResponse;
 import org.ramer.admin.entity.response.manage.MenuResponse;
@@ -13,11 +20,8 @@ import org.ramer.admin.service.common.CommonService;
 import org.ramer.admin.service.manage.system.ConfigService;
 import org.ramer.admin.service.manage.system.MenuService;
 import org.ramer.admin.util.TextUtil;
-import java.util.*;
-import java.util.stream.Collectors;
-import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -38,47 +42,25 @@ public class CommonServiceImpl implements CommonService {
     // 所有可用菜单
     final List<MenuResponse> menusAll = new ArrayList<>();
     // 可用菜单的树形结构
-    final List<MenuResponse> menus = new ArrayList<>();
-    menuPoJos.forEach(
-        menuPoJo ->
-            menusAll.add(
-                new MenuResponse(
-                    menuPoJo.getId(),
-                    menuPoJo.getName(),
-                    menuPoJo.getUrl(),
-                    menuPoJo.getLeaf(),
-                    menuPoJo.getIcon(),
-                    menuPoJo.getPId())));
-    menuPoJos
-        .stream()
-        .filter(menuPoJo -> menuPoJo.getPId() == null)
-        .forEach(
-            menuPoJo -> {
-              log.info(" CommonServiceImpl.writeMenuAndSiteInfo : [{}]", menuPoJo.getId());
-              menus.add(
-                  new MenuResponse(
-                      menuPoJo.getId(),
-                      menuPoJo.getName(),
-                      menuPoJo.getUrl(),
-                      menuPoJo.getLeaf(),
-                      menuPoJo.getIcon(),
-                      menuPoJo.getPId()));
-            });
+    menuPoJos.forEach(menuPoJo -> menusAll.add(MenuResponse.of(menuPoJo)));
+    final List<MenuResponse> menus =
+        menuPoJos.stream()
+            .filter(menuPoJo -> menuPoJo.getPId() == null)
+            .map(MenuResponse::of)
+            .collect(Collectors.toList());
     menusAll.removeAll(menus);
     Stack<MenuResponse> retain = new Stack<>();
     menus.forEach(retain::push);
     while (retain.size() > 0 && menusAll.size() > 0) {
       MenuResponse menu = retain.pop();
       // 当前节点的子节点
-      menusAll
-          .stream()
-          .filter(menuResponse -> menuResponse.getPId().equals(menu.getId()))
-          .filter(menuResponse -> !menuResponse.getLeaf())
+      menusAll.stream()
+          .filter(
+              menuResponse -> menuResponse.getPId().equals(menu.getId()) && !menuResponse.getLeaf())
           .forEach(retain::push);
       // 子节点具有叶子节点,入栈
       List<MenuResponse> childResponse =
-          menusAll
-              .stream()
+          menusAll.stream()
               .filter(menuResponse -> menuResponse.getPId().equals(menu.getId()))
               .collect(Collectors.toList());
       menu.setChildren(childResponse);
@@ -93,8 +75,8 @@ public class CommonServiceImpl implements CommonService {
   }
 
   @Override
-  public <T extends BaseService<E, U>, E extends AbstractEntity, U> ResponseEntity create(
-      T invoke, E entity, BindingResult bindingResult) {
+  public <S extends BaseService<T, E>, T extends AbstractEntity, E extends AbstractEntityPoJo>
+      ResponseEntity create(S invoke, T entity, BindingResult bindingResult) {
     if (bindingResult.hasErrors()) {
       return CommonResponse.fail(collectBindingResult(bindingResult));
     }
@@ -110,21 +92,29 @@ public class CommonServiceImpl implements CommonService {
   }
 
   @Override
-  public synchronized <T extends BaseService<E, U>, E extends AbstractEntity, U> String update(
-      T invoke, final String idStr, final String page, Map<String, Object> map, String propName) {
+  public <S extends BaseService<T, E>, T extends AbstractEntity, E extends AbstractEntityPoJo>
+      String update(
+          S invoke,
+          Class<E> clazz,
+          final String idStr,
+          final String page,
+          Map<String, Object> map,
+          String propName) {
     final long id = TextUtil.validLong(idStr, 0);
     if (id <= 0) {
       throw new CommonException("id 格式不正确");
     }
-    map.put(propName, invoke.getPoJoById(id));
+    map.put(propName, invoke.getPoJoById(id, clazz));
     return page;
   }
 
   @Override
-  public synchronized <T extends BaseService<E, U>, E extends AbstractEntity, U>
-      ResponseEntity update(T invoke, E entity, String idStr, BindingResult bindingResult) {
+  public <S extends BaseService<T, E>, T extends AbstractEntity, E extends AbstractEntityPoJo>
+      ResponseEntity update(S invoke, T entity, String idStr, BindingResult bindingResult) {
     final long id = TextUtil.validLong(idStr, 0);
-    if (id <= 0) return CommonResponse.wrongFormat("id");
+    if (id <= 0) {
+      return CommonResponse.wrongFormat("id");
+    }
     if (bindingResult.hasErrors()) {
       return CommonResponse.fail(collectBindingResult(bindingResult));
     }
@@ -141,10 +131,12 @@ public class CommonServiceImpl implements CommonService {
   }
 
   @Override
-  public synchronized <T extends BaseService<E, U>, E extends AbstractEntity, U>
-      ResponseEntity delete(final T invoke, final String idStr) {
+  public <S extends BaseService<T, E>, T extends AbstractEntity, E extends AbstractEntityPoJo>
+      ResponseEntity delete(final S invoke, final String idStr) {
     long id = TextUtil.validLong(idStr, 0);
-    if (id <= 0) return CommonResponse.wrongFormat("id");
+    if (id <= 0) {
+      return CommonResponse.wrongFormat("id");
+    }
     try {
       invoke.delete(id);
     } catch (Exception e) {
@@ -152,6 +144,16 @@ public class CommonServiceImpl implements CommonService {
       return CommonResponse.fail("删除失败,数据格式异常");
     }
     return CommonResponse.ok(null, "删除成功");
+  }
+
+  @Override
+  public <T extends AbstractEntity> ResponseEntity page(
+      final Page<T> page, final Function<T, ?> function) {
+    return CommonResponse.ok(
+        new PageImpl<>(
+            page.getContent().stream().map(function).collect(Collectors.toList()),
+            page.getPageable(),
+            page.getTotalElements()));
   }
 
   @Override

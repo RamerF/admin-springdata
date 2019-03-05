@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.ramer.admin.entity.AbstractEntity;
 import org.ramer.admin.entity.domain.manage.Roles;
+import org.ramer.admin.entity.pojo.manage.RolesPoJo;
 import org.ramer.admin.entity.response.CommonResponse;
 import org.ramer.admin.service.common.CommonService;
 import org.ramer.admin.service.manage.system.*;
@@ -113,7 +114,8 @@ public class RolesController {
         roles.getPrivileges().stream().map(AbstractEntity::getId).collect(Collectors.toList()));
     map.put("menus", menuService.list(null));
     map.put("privileges", privilegeService.list(null));
-    return commonService.update(service, idStr, "manage/roles/update", map, "roles");
+    return commonService.update(
+        service, RolesPoJo.class, idStr, "manage/roles/update", map, "roles");
   }
 
   @PutMapping("/{id}")

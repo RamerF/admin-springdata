@@ -2,6 +2,8 @@ package org.ramer.admin.entity.response.manage;
 
 import java.util.List;
 import lombok.*;
+import org.ramer.admin.entity.pojo.manage.MenuPoJo;
+import org.springframework.beans.BeanUtils;
 
 /** @author ramer */
 @Data
@@ -16,12 +18,9 @@ public final class MenuResponse {
   private Long pId;
   private List<MenuResponse> children;
 
-  public MenuResponse(Long id, String name, String url, Boolean leaf, String icon, Long pId) {
-    this.id = id;
-    this.name = name;
-    this.url = url;
-    this.leaf = leaf;
-    this.icon = icon;
-    this.pId = pId;
+  public static MenuResponse of(MenuPoJo menuPoJo) {
+    MenuResponse response = new MenuResponse();
+    BeanUtils.copyProperties(menuPoJo, response);
+    return response;
   }
 }

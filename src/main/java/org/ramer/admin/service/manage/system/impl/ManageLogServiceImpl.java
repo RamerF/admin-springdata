@@ -1,6 +1,7 @@
 package org.ramer.admin.service.manage.system.impl;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -28,17 +29,6 @@ public class ManageLogServiceImpl implements ManageLogService {
   @Override
   public long count() {
     return repository.count();
-  }
-
-  @Override
-  public ManageLog getPoJoById(final long id) {
-    return Optional.ofNullable(getById(id))
-        .map(
-            manageLog -> {
-              manageLog.setManager(null);
-              return manageLog;
-            })
-        .orElse(null);
   }
 
   @Override

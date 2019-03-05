@@ -1,11 +1,12 @@
 package org.ramer.admin.service.manage.system;
 
 import org.ramer.admin.entity.domain.manage.Manager;
+import org.ramer.admin.entity.pojo.manage.ManagerPoJo;
 import org.ramer.admin.service.common.BaseService;
 import org.ramer.admin.service.manage.system.impl.ManagerServiceImpl.ManagerLogin;
 import java.util.List;
 
-public interface ManagerService extends BaseService<Manager, Manager> {
+public interface ManagerService extends BaseService<Manager, ManagerPoJo> {
 
   Manager save(Manager o, List<Long> roleIds);
 

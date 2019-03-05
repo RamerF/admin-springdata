@@ -1,22 +1,39 @@
 package org.ramer.admin.entity.pojo.manage;
 
 import java.util.Date;
-import java.util.List;
-
 import lombok.*;
+import org.ramer.admin.entity.domain.manage.Manager;
+import org.ramer.admin.entity.pojo.AbstractEntityPoJo;
 
 /** @author ramer */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public final class ManagerPoJo {
-  private Long id;
-  private String name;
-  private String gender;
+@EqualsAndHashCode(callSuper = true)
+public final class ManagerPoJo extends AbstractEntityPoJo {
   private String empNo;
-  private Boolean avatar;
+  private String password;
+  private String name;
+  private Integer gender;
   private String phone;
-  private List<String> roles;
-  private Date validDate;
+  private String avatar;
   private Boolean active;
+  private Date validDate;
+
+  public static ManagerPoJo of(Manager manager) {
+    if (manager == null) {
+      return null;
+    }
+    ManagerPoJo poJo = new ManagerPoJo();
+    poJo.setEmpNo(manager.getEmpNo());
+    poJo.setPassword(manager.getPassword());
+    poJo.setName(manager.getName());
+    poJo.setGender(manager.getGender());
+    poJo.setPhone(manager.getPhone());
+    poJo.setAvatar(manager.getAvatar());
+    poJo.setValidDate(manager.getValidDate());
+
+    AbstractEntityPoJo.of(poJo, manager);
+    return poJo;
+  }
 }

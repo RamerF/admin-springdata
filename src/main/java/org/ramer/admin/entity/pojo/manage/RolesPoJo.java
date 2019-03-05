@@ -1,28 +1,23 @@
 package org.ramer.admin.entity.pojo.manage;
 
-import java.util.Date;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.ramer.admin.entity.domain.manage.Roles;
+import org.ramer.admin.entity.pojo.AbstractEntityPoJo;
 
 /** @author ramer created on 11/5/18 */
 @Data
-public class RolesPoJo {
-  private long id;
-  private Integer state;
+@EqualsAndHashCode(callSuper = true)
+public class RolesPoJo extends AbstractEntityPoJo {
   private String name;
   private String remark;
-  private Date createTime;
-  private Date updateTime;
 
   public static RolesPoJo of(Roles roles) {
-    if (roles == null) return null;
-    RolesPoJo rolesPoJo = new RolesPoJo();
-    rolesPoJo.setId(roles.getId());
-    rolesPoJo.setState(roles.getState());
-    rolesPoJo.setName(roles.getName());
-    rolesPoJo.setRemark(roles.getRemark());
-    rolesPoJo.setCreateTime(roles.getCreateTime());
-    rolesPoJo.setUpdateTime(roles.getUpdateTime());
-    return rolesPoJo;
+    RolesPoJo poJo = new RolesPoJo();
+    poJo.setName(roles.getName());
+    poJo.setRemark(roles.getRemark());
+
+    AbstractEntityPoJo.of(poJo, roles);
+    return poJo;
   }
 }

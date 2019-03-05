@@ -1,16 +1,17 @@
 package org.ramer.admin.service.manage.system.impl;
 
-import org.ramer.admin.entity.Constant;
-import org.ramer.admin.entity.domain.manage.Menu;
-import org.ramer.admin.entity.pojo.manage.MenuPoJo;
-import org.ramer.admin.repository.manage.MenuRepository;
-import org.ramer.admin.service.manage.system.MenuService;
-import org.ramer.admin.service.manage.system.PrivilegeService;
-import org.ramer.admin.util.TextUtil;
 import java.util.*;
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.ramer.admin.entity.Constant;
+import org.ramer.admin.entity.domain.manage.Menu;
+import org.ramer.admin.entity.pojo.manage.MenuPoJo;
+import org.ramer.admin.exception.CommonException;
+import org.ramer.admin.repository.manage.MenuRepository;
+import org.ramer.admin.service.manage.system.MenuService;
+import org.ramer.admin.service.manage.system.PrivilegeService;
+import org.ramer.admin.util.TextUtil;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -34,7 +35,7 @@ public class MenuServiceImpl implements MenuService {
 
   @Transactional
   @Override
-  public Menu create(Menu menu) throws Exception {
+  public Menu create(Menu menu) throws CommonException {
     textFilter(menu, menu);
     privilegeService.create(menu.getAlia(), menu.getRemark());
     return repository.saveAndFlush(menu);
@@ -43,11 +44,6 @@ public class MenuServiceImpl implements MenuService {
   @Override
   public long count() {
     return repository.count();
-  }
-
-  @Override
-  public MenuPoJo getPoJoById(final long id) {
-    return Optional.ofNullable(getById(id)).map(MenuPoJo::of).orElse(null);
   }
 
   @Override

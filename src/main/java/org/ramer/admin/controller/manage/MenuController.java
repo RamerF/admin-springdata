@@ -2,6 +2,7 @@ package org.ramer.admin.controller.manage;
 
 import com.alibaba.fastjson.JSONObject;
 import org.ramer.admin.entity.domain.manage.Menu;
+import org.ramer.admin.entity.pojo.manage.MenuPoJo;
 import org.ramer.admin.entity.response.CommonResponse;
 import org.ramer.admin.service.common.CommonService;
 import org.ramer.admin.service.manage.system.MenuService;
@@ -85,7 +86,7 @@ public class MenuController {
   @ApiOperation("更新系统菜单页面")
   String update(@PathVariable("id") String idStr, Map<String, Object> map) throws Exception {
     map.put("menus", service.list(null));
-    return commonService.update(service, idStr, "manage/menu/update", map, "menu");
+    return commonService.update(service, MenuPoJo.class, idStr, "manage/menu/update", map, "menu");
   }
 
   @PutMapping("/{id}")

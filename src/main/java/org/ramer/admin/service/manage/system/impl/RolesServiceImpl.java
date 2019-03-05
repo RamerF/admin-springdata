@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.ramer.admin.entity.AbstractEntity;
 import org.ramer.admin.entity.Constant;
 import org.ramer.admin.entity.domain.manage.*;
-import org.ramer.admin.entity.pojo.manage.RolesPoJo;
 import org.ramer.admin.repository.manage.RolesRepository;
 import org.ramer.admin.service.manage.system.RolesService;
 import org.ramer.admin.util.TextUtil;
@@ -60,9 +59,7 @@ public class RolesServiceImpl implements RolesService {
 
   @Override
   public List<Long> listMenuIds(Roles roles) {
-    return roles
-        .getMenus()
-        .stream()
+    return roles.getMenus().stream()
         .mapToLong(AbstractEntity::getId)
         .boxed()
         .collect(Collectors.toList());
@@ -78,11 +75,6 @@ public class RolesServiceImpl implements RolesService {
   @Override
   public long count() {
     return repository.count();
-  }
-
-  @Override
-  public RolesPoJo getPoJoById(final long id) {
-    return Optional.ofNullable(getById(id)).map(RolesPoJo::of).orElse(null);
   }
 
   @Override

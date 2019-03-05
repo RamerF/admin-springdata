@@ -55,11 +55,6 @@ public class ConfigServiceImpl implements ConfigService {
   }
 
   @Override
-  public Config getPoJoById(final long id) {
-    return getById(id);
-  }
-
-  @Override
   public Config getById(long id) {
     return repository.findById(id).orElse(null);
   }

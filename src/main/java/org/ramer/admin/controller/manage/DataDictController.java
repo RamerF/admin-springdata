@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.ramer.admin.entity.domain.manage.DataDict;
+import org.ramer.admin.entity.pojo.manage.DataDictPoJo;
 import org.ramer.admin.entity.response.CommonResponse;
 import org.ramer.admin.exception.CommonException;
 import org.ramer.admin.service.common.CommonService;
@@ -107,7 +108,8 @@ public class DataDictController {
     if (typeCode == null) {
       throw new CommonException(String.format("参数%s不能为空", "typeCode"));
     }
-    return commonService.update(service, idStr, "manage/data_dict/update", map, "dataDict");
+    return commonService.update(
+        service, DataDictPoJo.class, idStr, "manage/data_dict/update", map, "dataDict");
   }
 
   @PutMapping("/{id}")

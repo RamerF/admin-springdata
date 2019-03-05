@@ -3,14 +3,14 @@ package org.ramer.admin.entity.pojo.manage;
 import java.util.Date;
 import lombok.*;
 import org.ramer.admin.entity.domain.manage.Menu;
+import org.ramer.admin.entity.pojo.AbstractEntityPoJo;
 
 /** @author ramer */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public final class MenuPoJo {
-  private Long id;
-  private Integer state;
+@EqualsAndHashCode(callSuper = true)
+public final class MenuPoJo extends AbstractEntityPoJo {
   private String name;
   private String url;
   private Boolean leaf;
@@ -18,8 +18,6 @@ public final class MenuPoJo {
   private Long pId;
   private String pName;
   private int sort;
-  private Date createTime;
-  private Date updateTime;
 
   public MenuPoJo(
       final Long id,
@@ -32,34 +30,31 @@ public final class MenuPoJo {
       final int sort,
       final Date createTime,
       final Date updateTime) {
-    this.id = id;
-    this.state = state;
-    this.name = name;
-    this.url = url;
-    this.leaf = leaf;
-    this.icon = icon;
-    this.pId = pId;
-    this.sort = sort;
-    this.createTime = createTime;
-    this.updateTime = updateTime;
+    setId(id);
+    setState(state);
+    setName(name);
+    setUrl(url);
+    setLeaf(leaf);
+    setIcon(icon);
+    setPId(pId);
+    setSort(sort);
+    setCreateTime(createTime);
+    setUpdateTime(updateTime);
   }
 
   public static MenuPoJo of(Menu menu) {
-    if (menu == null) return null;
-    MenuPoJo menuPoJo = new MenuPoJo();
-    menuPoJo.setId(menu.getId());
-    menuPoJo.setState(menu.getState());
-    menuPoJo.setIcon(menu.getIcon());
-    menuPoJo.setLeaf(menu.getLeaf());
-    menuPoJo.setName(menu.getName());
+    MenuPoJo poJo = new MenuPoJo();
+    poJo.setIcon(menu.getIcon());
+    poJo.setLeaf(menu.getLeaf());
+    poJo.setName(menu.getName());
     if (menu.getParent() != null) {
-      menuPoJo.setPId(menu.getParent().getId());
-      menuPoJo.setPName(menu.getParent().getName());
+      poJo.setPId(menu.getParent().getId());
+      poJo.setPName(menu.getParent().getName());
     }
-    menuPoJo.setSort(menu.getSort());
-    menuPoJo.setUrl(menu.getUrl());
-    menuPoJo.setCreateTime(menu.getCreateTime());
-    menuPoJo.setUpdateTime(menu.getUpdateTime());
-    return menuPoJo;
+    poJo.setSort(menu.getSort());
+    poJo.setUrl(menu.getUrl());
+
+    AbstractEntityPoJo.of(poJo, menu);
+    return poJo;
   }
 }
