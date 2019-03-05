@@ -54,17 +54,14 @@ public class CommonServiceImpl implements CommonService {
     while (retain.size() > 0 && menusAll.size() > 0) {
       MenuResponse menu = retain.pop();
       // 当前节点的子节点
-      menusAll.stream()
-          .filter(
-              menuResponse -> menuResponse.getPId().equals(menu.getId()) && !menuResponse.getLeaf())
-          .forEach(retain::push);
-      // 子节点具有叶子节点,入栈
-      List<MenuResponse> childResponse =
+      List<MenuResponse> child =
           menusAll.stream()
               .filter(menuResponse -> menuResponse.getPId().equals(menu.getId()))
               .collect(Collectors.toList());
-      menu.setChildren(childResponse);
-      menusAll.removeAll(childResponse);
+      // 子节点具有叶子节点,入栈
+      child.stream().filter(menuResponse -> !menuResponse.getLeaf()).forEach(retain::push);
+      menu.setChildren(child);
+      menusAll.removeAll(child);
     }
     map.put("menus", menus);
     JSONObject siteJson = new JSONObject();

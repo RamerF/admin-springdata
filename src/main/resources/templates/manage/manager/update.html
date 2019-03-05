@@ -64,10 +64,10 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">
                     性别
-                </label>
+                </label >
                 <div class="layui-input-block">
                     <input type="radio" name="gender" value="1" title="男"
-                           th:checked="${manager.gender == 1?'checked':'false'}">
+                           th:checked="${manager.gender == 1?'checked':'false'}" th:id='${manager.gender}'>
                     <div class="layui-unselect layui-form-radio layui-form-radioed"><i
                             class="layui-anim layui-icon layui-anim-scaleSpring"></i>
                         <div>男</div>
@@ -143,6 +143,8 @@
 
         //监听提交
         form.on('submit(add)', function(data) {
+          $('.layui-btn').attr('disabled','disabled');
+          $('.layui-btn').css('background','#ccc');
           data.field['_method'] = 'put';
           var gender = $('.layui-input-block input:radio:checked').val();
           data.field['gender'] = gender;
@@ -160,10 +162,12 @@
             type: 'post',
             data: data.field,
             success: function(data) {
+              $('.layui-btn').removeAttr('disabled');
+              $('.layui-btn').css('background','#009688');
               if (data.result == true) {
                 //刷新表
                 window.parent.refresh();
-
+                $(".layui-btn").removeAttr('disabled');
                 layer.alert(data.msg, {icon: 1}, function() {
                   // 获得frame索引
                   var index = parent.layer.getFrameIndex(window.name);

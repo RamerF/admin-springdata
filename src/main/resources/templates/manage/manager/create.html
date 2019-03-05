@@ -109,6 +109,8 @@
 
         //监听提交
         form.on('submit(add)', function(data) {
+          $('.layui-btn').attr('disabled','disabled');
+          $('.layui-btn').css('background','#ccc');
           data.field['_method'] = 'post';
           var roleses = [];
           $.each($('.roleses input:checked'), function(index, val) {
@@ -120,8 +122,11 @@
             type: 'post',
             data: data.field,
             success: function(data) {
+              $('.layui-btn').removeAttr('disabled');
+              $('.layui-btn').css('background','#009688');
               if (data.result == true) {
                 //刷新表
+                $(".layui-btn").removeAttr('disabled');
                 window.parent.refresh();
                 layer.alert(data.msg, {icon: 1}, function() {
 

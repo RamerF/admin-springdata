@@ -90,6 +90,8 @@
 
         //监听提交
         form.on('submit(add)', function(data) {
+          $('.layui-btn').attr('disabled','disabled');
+          $('.layui-btn').css('background','#ccc');
           data.field['_method'] = 'post';
           data.field['typeCode'] = typeCode;
           $.ajax({
@@ -97,6 +99,8 @@
             type: 'post',
             data: data.field,
             success: function(data) {
+              $('.layui-btn').removeAttr('disabled');
+              $('.layui-btn').css('background','#009688');
               if (data.result == true) {
                 //刷新表
                 window.parent.refresh();

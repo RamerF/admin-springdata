@@ -1,6 +1,7 @@
 package org.ramer.admin.validator;
 
 import org.ramer.admin.entity.domain.manage.DataDict;
+import org.ramer.admin.entity.pojo.manage.DataDictPoJo;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
@@ -11,7 +12,7 @@ import org.springframework.validation.Validator;
 public class DataDictValidator implements Validator {
   @Override
   public boolean supports(final Class<?> clazz) {
-    return clazz.isAssignableFrom(DataDict.class);
+    return clazz.isAssignableFrom(DataDict.class) || clazz.isAssignableFrom(DataDictPoJo.class);
   }
 
   @Override

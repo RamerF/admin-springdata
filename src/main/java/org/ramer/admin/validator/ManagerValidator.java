@@ -1,10 +1,11 @@
 package org.ramer.admin.validator;
 
-import org.ramer.admin.entity.Constant;
-import org.ramer.admin.entity.domain.manage.Manager;
-import org.ramer.admin.service.manage.system.ManagerService;
 import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.ramer.admin.entity.Constant;
+import org.ramer.admin.entity.domain.manage.Manager;
+import org.ramer.admin.entity.pojo.manage.ManagerPoJo;
+import org.ramer.admin.service.manage.system.ManagerService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
@@ -14,12 +15,11 @@ import org.springframework.validation.Validator;
 @Slf4j
 @Component
 public class ManagerValidator implements Validator {
-  @Resource
-  ManagerService service;
+  @Resource ManagerService service;
 
   @Override
   public boolean supports(final Class<?> clazz) {
-    return clazz.isAssignableFrom(Manager.class);
+    return clazz.isAssignableFrom(Manager.class) || clazz.isAssignableFrom(ManagerPoJo.class);
   }
 
   @Override

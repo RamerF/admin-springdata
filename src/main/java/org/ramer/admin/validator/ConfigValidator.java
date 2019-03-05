@@ -1,17 +1,19 @@
 package org.ramer.admin.validator;
 
 import org.ramer.admin.entity.domain.manage.Config;
+import org.ramer.admin.entity.pojo.manage.ConfigPoJo;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+
 
 /** @author ramer */
 @Component
 public class ConfigValidator implements Validator {
   @Override
   public boolean supports(final Class<?> clazz) {
-    return clazz.isAssignableFrom(Config.class);
+    return clazz.isAssignableFrom(Config.class) || clazz.isAssignableFrom(ConfigPoJo.class);
   }
 
   @Override

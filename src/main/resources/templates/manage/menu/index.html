@@ -45,7 +45,7 @@
                         <i class="layui-icon layui-icon-edit"></i>修改
                     </button>
 
-                    <button class="layui-btn" onclick="del();">
+                    <button class="layui-btn" onclick="del(this);">
                         <i class="layui-icon layui-icon-delete"></i>删除
                     </button>
                 </xblock>
@@ -59,7 +59,7 @@
               // 搜索
               function search(obj)
               {
-                $('#table').bootstrapTable('refresh', {query: {'criteria': $(this).val()}});
+                $('#table').bootstrapTable('refresh', {pageNumber:1,pageSize:15,query: {'criteria': $(obj).prev().val()}});
               }
 
               $('#name').on('input', function() {
@@ -90,8 +90,10 @@
               }
 
               //删除参数
-              function del()
+              function del(obj)
               {
+                $(obj).attr('disabled','disabled');
+                $(obj).css('background','#ccc');
                 if ($('#table').bootstrapTable('getSelections').length == 1) {
                   layer.confirm('确认要删除吗？', {icon: 3, title: '信息'}, function() {
                     //发异步删除数据
@@ -100,6 +102,8 @@
                       type: 'post',
                       data: {'_method': 'delete', '_csrf': '[[${_csrf!=null?_csrf.token:null}]]'},
                       success: function(data) {
+                        $(obj).removeAttr('disabled');
+                        $(obj).css('background','#009688');
                         if (data.result == true) {
                           //刷新表
                           refresh();
@@ -110,10 +114,11 @@
                         }
                       },
                     });
-
                   });
                 } else {
                   layer.msg('请选择一条需要删除的数据。', {icon: 2});
+                  $(obj).removeAttr('disabled');
+                  $(obj).css('background','#009688');
                 }
               }
 
@@ -134,10 +139,18 @@
                 pagination: true,//是否分页
                 sidePagination: 'server',  // 设置为服务器端分页
                 queryParams: function(params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
-                  return {
-                    size: params.limit,//params.limit, // 每页要显示的数据条数
-                    page: (params.offset / params.limit) + 1, // 当前页
-                  };
+                  if ($('#name').val()==""){
+                    return {
+                      size: params.limit,//params.limit, // 每页要显示的数据条数
+                      page: (params.offset / params.limit) + 1, // 当前页
+                    };
+                  }else {
+                    return {
+                      criteria:$('#name').val(),
+                      size: params.limit,//params.limit, // 每页要显示的数据条数
+                      page: (params.offset / params.limit) + 1, // 当前页
+                    };
+                  }
                 },
                   /* sortName: 'name', // 要排序的字段
                    sortOrder: 'desc', // 排序规则 */
@@ -159,9 +172,6 @@
                     title: '最终页面',
                     align: 'center',
                     valign: 'middle',
-                    formatter: function(data) {
-                            return data ? "是" : "否";
-                        }
                   }, {
                     field: 'url',
                     title: '路径',

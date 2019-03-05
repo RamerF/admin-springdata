@@ -67,7 +67,6 @@
             $($('form>input')[3]).removeAttr('disabled');
           },
           error: function(result) {
-            console.log(result.responseJSON.msg);
             layer.msg(result.responseJSON.msg);
             if (result.status == 403) {
               window.location.reload();

@@ -18,20 +18,23 @@ import org.springframework.util.StringUtils;
 @Service
 public class ConfigServiceImpl implements ConfigService {
   @Resource private ConfigRepository repository;
-  private final Map<String, String> SITE_INFO_MAP = new HashMap<>();
+  // 缓存站点信息
+  //  private final Map<String, String> SITE_INFO_MAP = new HashMap<>();
 
   @Override
   public String getSiteInfo(String location) {
-    return Optional.ofNullable(SITE_INFO_MAP.get(location))
-        .orElseGet(
-            () -> {
-              final Config siteInfo = getByCode(location);
-              if (siteInfo == null) {
-                return location;
-              }
-              SITE_INFO_MAP.put(location, siteInfo.getValue());
-              return siteInfo.getValue();
-            });
+    // 缓存站点信息
+    //    return Optional.ofNullable(SITE_INFO_MAP.get(location))
+    //        .orElseGet(
+    //            () -> {
+    //              final Config siteInfo = getByCode(location);
+    //              if (siteInfo == null) {
+    //                return location;
+    //              }
+    //              SITE_INFO_MAP.put(location, siteInfo.getValue());
+    //              return siteInfo.getValue();
+    //            });
+    return getByCode(location).getValue();
   }
 
   @Override

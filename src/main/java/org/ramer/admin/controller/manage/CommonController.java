@@ -1,6 +1,5 @@
 package org.ramer.admin.controller.manage;
 
-import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.Map;
@@ -46,12 +45,8 @@ public class CommonController {
 
   @GetMapping("/welcome")
   @ApiOperation("欢迎页面")
-  public String welcome(Map<String, Object> map) {
-    JSONObject siteJson = new JSONObject();
-    siteJson.put("title", configService.getSiteInfo(Constant.SITE_TITLE));
-    siteJson.put("name", configService.getSiteInfo(Constant.SITE_NAME));
-    siteJson.put("copyright", configService.getSiteInfo(Constant.SITE_COPYRIGHT));
-    map.put("site", siteJson);
+  public String welcome(HttpSession session, Map<String, Object> map) {
+    commonService.writeMenuAndSiteInfo(session, map);
     return "manage/welcome";
   }
 
