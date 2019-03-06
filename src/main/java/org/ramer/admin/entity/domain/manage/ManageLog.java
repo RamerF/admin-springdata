@@ -7,6 +7,11 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.*;
 import javax.persistence.Entity;
 
+/**
+ * 管理端操作日志.
+ *
+ * @author ramer
+ */
 @Entity(name = "manage_log")
 @Table
 @Data

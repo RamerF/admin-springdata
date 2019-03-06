@@ -1,7 +1,6 @@
 package org.ramer.admin.service.manage.system.impl;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +36,8 @@ public class DataDictServiceImpl implements DataDictService {
   }
 
   @Override
-  public Page<DataDict> pageByTypeCode(String typeCode, String criteria, int page, int size) {
+  public Page<DataDict> pageByTypeCode(
+      String typeCode, String criteria, final int page, final int size) {
     if (page < 1 || size < 0) {
       return new PageImpl<>(Collections.emptyList());
     }
@@ -64,7 +64,7 @@ public class DataDictServiceImpl implements DataDictService {
   @Transactional
   @Override
   public synchronized DataDict create(DataDict dataDict) {
-    return create(dataDict, null);
+    return create(dataDict, Objects.requireNonNull(dataDict.getDataDictType()).getCode());
   }
 
   @Override
@@ -116,7 +116,7 @@ public class DataDictServiceImpl implements DataDictService {
 
   @Transactional
   @Override
-  public synchronized void delete(long dicId) {
+  public synchronized void delete(final long dicId) {
     repository.deleteById(dicId);
   }
 

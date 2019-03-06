@@ -6,7 +6,11 @@ import javax.persistence.Entity;
 
 import lombok.*;
 
-/** @author ramer */
+/**
+ * 三方调用凭证.
+ *
+ * @author ramer
+ */
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = false)

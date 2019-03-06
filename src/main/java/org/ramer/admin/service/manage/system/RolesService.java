@@ -11,9 +11,9 @@ public interface RolesService extends BaseService<Roles, RolesPoJo> {
 
   Roles update(Roles roles, List<Long> menuIds, List<Long> privilegeIds);
 
-  List<Roles> listByManager(long managerId);
+  List<Roles> listByManager(final long managerId);
 
-  List<String> listNameByManager(long managerId);
+  List<String> listNameByManager(final long managerId);
 
   List<Long> listMenuIds(Roles role);
 }

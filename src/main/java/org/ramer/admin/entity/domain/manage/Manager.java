@@ -2,17 +2,17 @@ package org.ramer.admin.entity.domain.manage;
 
 import java.util.Date;
 import java.util.List;
-
 import javax.persistence.*;
-
-import org.hibernate.annotations.Where;
+import lombok.*;
 import org.ramer.admin.entity.AbstractEntity;
 import org.ramer.admin.entity.Constant;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import lombok.*;
-
-/** 系统管理员. */
+/**
+ * 管理员.
+ *
+ * @author ramer
+ */
 @Entity(name = "manager")
 @Table
 @Data
@@ -36,15 +36,17 @@ public class Manager extends AbstractEntity {
 
   @Column(length = 50)
   private String avatar;
+
+  // TODO-TIP: active字段暂时没用
   /** 审核状态 */
-  @Column(nullable = false, columnDefinition = "tinyint default 1")
+  @Column(nullable = false, columnDefinition = "tinyint default 1 comment '审核状态'")
   private Integer active;
 
   public String getActiveDesc() {
-    return active.equals(Constant.ACTIVE_TRUE) ? "已审核" : "未审核";
+    return active != null && active.equals(Constant.ACTIVE_TRUE) ? "已审核" : "未审核";
   }
-
-  @Column(nullable = true)
+  // TODO-TIP: validDate字段暂时没用
+  @Column
   @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private Date validDate;
 
@@ -53,7 +55,6 @@ public class Manager extends AbstractEntity {
       name = "manager_roles",
       joinColumns = {@JoinColumn(name = "manager_id")},
       inverseJoinColumns = {@JoinColumn(name = "roles_id")})
-  @Where(clause = "state = " + Constant.STATE_ON)
   private List<Roles> roleses;
 
   public Manager(Long id) {

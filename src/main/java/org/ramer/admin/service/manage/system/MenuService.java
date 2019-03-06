@@ -8,7 +8,7 @@ import java.util.List;
 /** @author ramer */
 public interface MenuService extends BaseService<Menu, MenuPoJo> {
 
-  List<Menu> listByManager(Long managerId);
+  List<Menu> listByManager(final long managerId);
 
-  List<MenuPoJo> listNameByManager(Long managerId);
+  List<MenuPoJo> listNameByManager(final long managerId);
 }

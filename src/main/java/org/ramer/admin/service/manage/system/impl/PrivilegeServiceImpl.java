@@ -36,8 +36,8 @@ public class PrivilegeServiceImpl implements PrivilegeService {
   }
 
   @Override
-  public List<Privilege> listByManagerId(long menuId) {
-    return repository.findByManager(menuId, Constant.STATE_ON);
+  public List<Privilege> listByManagerId(final long managerId) {
+    return repository.findByManager(managerId, Constant.STATE_ON);
   }
 
   @Transactional
@@ -47,7 +47,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
   }
 
   @Override
-  public List<Privilege> listByRoles(Long rolesId) {
+  public List<Privilege> listByRoles(final long rolesId) {
     return repository.findByRoles(rolesId, Constant.STATE_ON);
   }
 

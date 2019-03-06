@@ -7,7 +7,11 @@ import javax.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Where;
 
-/** 系统菜单（此表是系统定义好的，没有增删改操作） */
+/**
+ * 菜单
+ *
+ * @author ramer
+ */
 @Data
 @Entity(name = "menu")
 @Table
@@ -40,9 +44,6 @@ public class Menu extends AbstractEntity {
 
   @Column(length = 100)
   private String remark;
-  //    @JoinColumn(name = "menu_id")
-  //    @OneToMany(fetch = FetchType.EAGER)
-  //    private List<Privilege> privileges;
 
   public static Menu of(long id) {
     final Menu menu = new Menu();

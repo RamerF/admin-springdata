@@ -31,6 +31,7 @@ public class ManagerServiceImpl implements ManagerService {
       List<Roles> roles = new ArrayList<>();
       roleIds.forEach(roleId -> roles.add(Roles.of(roleId)));
       manager.setRoleses(roles);
+      manager.setPassword(EncryptUtil.execEncrypt(manager.getPassword()));
     }
     return create(manager);
   }
@@ -73,7 +74,7 @@ public class ManagerServiceImpl implements ManagerService {
 
   @Transactional
   @Override
-  public synchronized int updatePassword(Long id, String old, String password) {
+  public synchronized int updatePassword(final long id, String old, String password) {
     Optional<Manager> optionalManager = repository.findById(id);
     if (optionalManager.isPresent()) {
       Manager person = optionalManager.get();
@@ -138,7 +139,7 @@ public class ManagerServiceImpl implements ManagerService {
   }
 
   @Override
-  public Manager getById(long id) {
+  public Manager getById(final long id) {
     return repository.findById(id).orElse(null);
   }
 
@@ -180,7 +181,7 @@ public class ManagerServiceImpl implements ManagerService {
 
   @Transactional
   @Override
-  public synchronized void delete(long id) {
+  public synchronized void delete(final long id) {
     repository.deleteById(id);
   }
 

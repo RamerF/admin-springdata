@@ -6,7 +6,11 @@ import javax.persistence.Entity;
 
 import lombok.*;
 
-/** 系统数据字典类别. */
+/**
+ * 数据字典类型.
+ *
+ * @author ramer
+ */
 @Entity(name = "data_dict_type")
 @Table
 @Data

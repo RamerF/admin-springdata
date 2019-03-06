@@ -10,9 +10,9 @@ import org.springframework.stereotype.Repository;
 public interface RolesRepository extends BaseRepository<Roles, Long> {
   @Query(
       "select r from org.ramer.admin.entity.domain.manage.Manager m inner join m.roleses r where m.id= :managerId and r.state= :state")
-  List<Roles> findByManager(@Param("managerId") long managerId, @Param("state") int state);
+  List<Roles> findByManagerId(@Param("managerId") long managerId, @Param("state") int state);
 
   @Query(
       "select r.name from org.ramer.admin.entity.domain.manage.Manager m inner join m.roleses r where m.id= :managerId and r.state= :state")
-  List<String> findNameByManager(@Param("managerId") long managerId, @Param("state") int state);
+  List<String> findNameByManagerId(@Param("managerId") long managerId, @Param("state") int state);
 }

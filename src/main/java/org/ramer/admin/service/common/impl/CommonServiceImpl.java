@@ -6,12 +6,14 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.ramer.admin.entity.AbstractEntity;
 import org.ramer.admin.entity.Constant;
 import org.ramer.admin.entity.domain.manage.Manager;
 import org.ramer.admin.entity.pojo.AbstractEntityPoJo;
 import org.ramer.admin.entity.pojo.manage.MenuPoJo;
+import org.ramer.admin.entity.request.AbstractEntityRequest;
 import org.ramer.admin.entity.response.CommonResponse;
 import org.ramer.admin.entity.response.manage.MenuResponse;
 import org.ramer.admin.exception.CommonException;
@@ -20,6 +22,7 @@ import org.ramer.admin.service.common.CommonService;
 import org.ramer.admin.service.manage.system.ConfigService;
 import org.ramer.admin.service.manage.system.MenuService;
 import org.ramer.admin.util.TextUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.ResponseEntity;
@@ -124,6 +127,36 @@ public class CommonServiceImpl implements CommonService {
     } catch (Exception e) {
       log.warn(" CommonServiceImpl.update : [{}]", e.getMessage());
       return CommonResponse.fail("更新失败,数据格式异常");
+    }
+  }
+
+  @Transactional
+  @Override
+  public <
+          S extends BaseService<T, E>,
+          T extends AbstractEntity,
+          E extends AbstractEntityPoJo,
+          R extends AbstractEntityRequest>
+      ResponseEntity update(
+          final S invoke,
+          Class<T> clazz,
+          final R entity,
+          final BindingResult bindingResult,
+          String... includeNullProperties) {
+    if (bindingResult.hasErrors()) {
+      return CommonResponse.fail(collectBindingResult(bindingResult));
+    }
+    try {
+      boolean doCreate =
+          Objects.isNull(
+              Objects.requireNonNull(BeanUtils.findDeclaredMethod(entity.getClass(), "getId"))
+                  .invoke(entity));
+      return Objects.isNull(invoke.update(clazz, entity, includeNullProperties))
+          ? CommonResponse.fail(doCreate ? "添加失败" : "更新失败,可能记录不存在")
+          : CommonResponse.ok(null, doCreate ? "添加成功" : "更新成功");
+    } catch (Exception e) {
+      log.warn(" CommonServiceImpl.update : [{}]", e.getMessage());
+      return CommonResponse.fail("操作失败,数据格式异常");
     }
   }
 

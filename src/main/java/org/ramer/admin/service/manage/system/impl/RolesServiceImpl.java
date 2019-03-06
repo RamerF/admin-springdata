@@ -48,13 +48,13 @@ public class RolesServiceImpl implements RolesService {
   }
 
   @Override
-  public List<Roles> listByManager(long managerId) {
-    return repository.findByManager(managerId, Constant.STATE_ON);
+  public List<Roles> listByManager(final long managerId) {
+    return repository.findByManagerId(managerId, Constant.STATE_ON);
   }
 
   @Override
-  public List<String> listNameByManager(long managerId) {
-    return repository.findNameByManager(managerId, Constant.STATE_ON);
+  public List<String> listNameByManager(final long managerId) {
+    return repository.findNameByManagerId(managerId, Constant.STATE_ON);
   }
 
   @Override
@@ -78,7 +78,7 @@ public class RolesServiceImpl implements RolesService {
   }
 
   @Override
-  public Roles getById(long id) {
+  public Roles getById(final long id) {
     return repository.findById(id).orElse(null);
   }
 
@@ -117,7 +117,7 @@ public class RolesServiceImpl implements RolesService {
 
   @Transactional
   @Override
-  public synchronized void delete(long id) {
+  public synchronized void delete(final long id) {
     repository.deleteById(id);
   }
 

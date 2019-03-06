@@ -8,7 +8,11 @@ import javax.persistence.Entity;
 import lombok.*;
 import org.hibernate.annotations.Where;
 
-/** 系统操作员角色. */
+/**
+ * 管理员角色.
+ *
+ * @author ramer
+ */
 @Entity(name = "roles")
 @Table
 @Data
