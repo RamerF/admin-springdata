@@ -126,7 +126,7 @@ public interface BaseService<T extends AbstractEntity, E extends AbstractEntityP
    * @param size 每页大小
    */
   default PageRequest pageRequest(final int page, final int size) {
-    return pageRequest(page, size, null);
+    return pageRequest(page, size, Sort.unsorted());
   }
   /**
    * 获取分页对象,支持排序.
