@@ -82,7 +82,9 @@ public interface BaseService<T extends AbstractEntity, E extends AbstractEntityP
     try {
       id =
           (Long)
-              Objects.requireNonNull(BeanUtils.findDeclaredMethod(u.getClass(), "getId")).invoke(u);
+              Objects.requireNonNull(
+                      BeanUtils.findDeclaredMethod(u.getClass(), "getId"), "getId方法不存在")
+                  .invoke(u);
       entity = getById(Objects.isNull(id) ? -1 : id);
       entity = Objects.isNull(entity) ? clazz.newInstance() : entity;
     } catch (Exception e) {
