@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import lombok.*;
 
 /**
- * 三方系统请求日志.
+ * 三方调用日志.
  *
  * @author ramer
  */

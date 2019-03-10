@@ -116,11 +116,17 @@ public class Constant {
     }
 
     public static Map<String, String> map() {
-      Map<String, String> map = new HashMap<>();
+      Map<String, String> map = new LinkedHashMap<>();
       for (PrivilegeEnum privilegeEnum : values()) {
         map.put(privilegeEnum.name, privilegeEnum.remark);
       }
       return map;
     }
+  }
+
+  /** 数据库字典类型CODE */
+  public static class DataDictTypeCode {
+    // 用于演示CODE
+    public static final String DEMO_CODE = "DEMO_CODE";
   }
 }

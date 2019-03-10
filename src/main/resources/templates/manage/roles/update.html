@@ -139,8 +139,7 @@
         }
         privilegeJson();
 
-        function privilegeJson()
-        {
+        function privilegeJson() {
           var privilegeJson = {};
           var id, remark;
           $.each($('.privileges-input input:checked'), function(index, val) {
@@ -171,8 +170,7 @@
             while (typeof (pid = doChecked(pid)) != 'undefined') {
             }
 
-            function doChecked(pid)
-            {
+            function doChecked(pid) {
               var prev;
               for (var i = 0; i < $(".layui-form-item .menu input").length; i++) {
                 if (pid == $('.layui-form-item .menu input:eq(' + i + ')').val()) {
@@ -212,8 +210,8 @@
 
           //监听提交
           form.on('submit(add)', function(data) {
-            $('.layui-btn').attr('disabled','disabled');
-            $('.layui-btn').css('background','#ccc');
+            $('.layui-btn').attr('disabled', 'disabled');
+            $('.layui-btn').css('background', '#ccc');
             data.field['_method'] = 'put';
             data.field['privilegeIds'] = privilegeIds;
             var menuIds = [];
@@ -227,10 +225,10 @@
               data: data.field,
               success: function(data) {
                 $('.layui-btn').removeAttr('disabled');
-                $('.layui-btn').css('background','#009688');
+                $('.layui-btn').css('background', '#009688');
                 if (data.result == true) {
                   //刷新表
-                  $(".layui-btn").removeAttr('disabled');
+                  $('.layui-btn').removeAttr('disabled');
                   window.parent.refresh();
 
                   layer.alert(data.msg, {icon: 1}, function() {
@@ -238,7 +236,7 @@
                     var index = parent.layer.getFrameIndex(window.name);
                     //关闭当前frame
                     parent.layer.close(index);
-                    top.location.href ="/manage/index";
+                    top.location.href = '/manage/index';
                   });
                 } else {
                   layer.alert(data.msg, {icon: 2});
@@ -254,15 +252,4 @@
     </script>
 </div>
 </body>
-
 </html>
-<!--TODO: 错误
-    1.修改时menuIds[]或者privilegeIds[]为空时：
-    {
-      "result": false,
-      "data": null,
-      "msg": "参数参数菜单未传递格式不正确"
-    }
-
-    2.修改时menuIds[]或者privilegeIds[]不管填的是否正确都会报400的错
-<!--&ndash;&gt;-->

@@ -17,9 +17,9 @@ public interface PrivilegeService extends BaseService<Privilege, PrivilegePoJo> 
    */
   List<Privilege> create(String expPrefix, String remark) throws CommonException;
 
-  List<Privilege> listByManagerId(long personId);
+  List<Privilege> listByManagerId(final long managerId);
 
   boolean saveBatch(List<Privilege> privileges);
 
-  List<Privilege> listByRoles(Long rolesId);
+  List<Privilege> listByRoles(final long rolesId);
 }

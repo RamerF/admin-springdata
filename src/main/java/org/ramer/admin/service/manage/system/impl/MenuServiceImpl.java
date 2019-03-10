@@ -24,12 +24,12 @@ public class MenuServiceImpl implements MenuService {
   @Resource private PrivilegeService privilegeService;
 
   @Override
-  public List<Menu> listByManager(Long managerId) {
+  public List<Menu> listByManager(final long managerId) {
     return repository.findByManager(managerId, Constant.STATE_ON);
   }
 
   @Override
-  public List<MenuPoJo> listNameByManager(Long managerId) {
+  public List<MenuPoJo> listNameByManager(final long managerId) {
     return repository.findNameByManager(managerId, Constant.STATE_ON);
   }
 
@@ -91,7 +91,7 @@ public class MenuServiceImpl implements MenuService {
 
   @Transactional
   @Override
-  public synchronized void delete(long id) {
+  public synchronized void delete(final long id) {
     repository.deleteById(id);
   }
 

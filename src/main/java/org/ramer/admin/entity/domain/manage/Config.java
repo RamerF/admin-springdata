@@ -4,7 +4,11 @@ import org.ramer.admin.entity.AbstractEntity;
 import javax.persistence.*;
 import lombok.*;
 
-/** 系统参数. */
+/**
+ * 系统配置.
+ *
+ * @author ramer
+ */
 @Entity(name = "config")
 @Table
 @Data

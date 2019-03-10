@@ -13,7 +13,7 @@ public interface DataDictService extends BaseService<DataDict, DataDictPoJo> {
 
   DataDict getByTypeCodeAndCode(String typeCode, String code);
 
-  Page<DataDict> pageByTypeCode(String typeCode, String criteria, int page, int size);
+  Page<DataDict> pageByTypeCode(String typeCode, String criteria, final int page, final int size);
 
   DataDict create(DataDict dataDict, String typeCode);
 }

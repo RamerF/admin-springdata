@@ -68,7 +68,7 @@ public class ConfigServiceImpl implements ConfigService {
   }
 
   @Override
-  public Page<Config> page(String criteria, int page, int size) {
+  public Page<Config> page(String criteria, final int page, final int size) {
     final PageRequest pageable = pageRequest(page, size);
     if (pageable == null) {
       new PageImpl<>(Collections.emptyList());

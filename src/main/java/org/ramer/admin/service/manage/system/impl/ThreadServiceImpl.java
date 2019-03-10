@@ -15,7 +15,7 @@ public class ThreadServiceImpl implements ThreadService {
   @Override
   public void newThread(Runnable runnable) {
     if (executorService == null || executorService.isShutdown()) {
-      executorService = Executors.newFixedThreadPool(30);
+      executorService = Executors.newFixedThreadPool(3);
     }
     try {
       executorService.execute(runnable);

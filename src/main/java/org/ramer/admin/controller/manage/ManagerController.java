@@ -80,8 +80,7 @@ public class ManagerController {
       @RequestParam(value = "validDate", required = false) String validDateStr,
       @RequestParam(value = "roleIds[]", required = false) String[] roleIdsStr,
       @Valid Manager manager,
-      BindingResult bindingResult)
-      throws Exception {
+      BindingResult bindingResult) {
     log.info(
         " ManagerController.create : [{},{},{}]",
         JSON.toJSONString(manager),
@@ -91,11 +90,14 @@ public class ManagerController {
         || !manager.getPassword().matches("^[a-zA-Z]\\w{5,17}$")) {
       return CommonResponse.fail("密码 必须以字母开头,长度在6~18之间,只能包含字符,数字和下划线");
     }
-    Date validDate = TextUtil.validDate(validDateStr, "yyyy-MM-dd HH:mm:ss", null);
-    manager.setValidDate(validDate);
     if (bindingResult.hasErrors()) {
       return CommonResponse.fail(commonService.collectBindingResult(bindingResult));
     }
+    Date validDate = TextUtil.validDate(validDateStr, "yyyy-MM-dd HH:mm:ss", null);
+    if (validDate == null || validDate.before(new Date())) {
+      return CommonResponse.fail("有效日期必须大于当前时间");
+    }
+    manager.setValidDate(validDate);
     try {
       manager =
           service.save(

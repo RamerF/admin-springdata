@@ -25,7 +25,7 @@ public interface ManagerService extends BaseService<Manager, ManagerPoJo> {
    * -2: 管理员不存在<br>
    * </pre>
    */
-  int updatePassword(Long id, String old, String password);
+  int updatePassword(final long id, String old, String password);
 
   ManagerLogin getLoginStatus(String empNo);
 

@@ -1,28 +1,22 @@
 package org.ramer.admin.entity.domain.manage;
 
-import org.ramer.admin.entity.AbstractEntity;
-import javax.persistence.*;
-import javax.persistence.Entity;
-
-import org.hibernate.annotations.Where;
-
-import org.ramer.admin.entity.Constant;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
+import javax.persistence.*;
 import lombok.*;
+import org.ramer.admin.entity.AbstractEntity;
 
-/** 系统数据字典. */
+/**
+ * 数据字典.
+ *
+ * @author ramer
+ */
 @Entity(name = "data_dict")
 @Table
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 public class DataDict extends AbstractEntity {
-  @Where(clause = "state = " + Constant.STATE_ON)
-  @ManyToOne
-  @JoinColumn(name = "data_dict_type_id")
-  @JsonBackReference
-  private DataDictType dataDictType;
+  @ManyToOne @JoinColumn @JsonBackReference private DataDictType dataDictType;
 
   @Column(nullable = false, length = 25)
   private String name;

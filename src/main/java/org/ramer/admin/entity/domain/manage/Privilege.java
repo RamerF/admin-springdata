@@ -4,15 +4,21 @@ import org.ramer.admin.entity.AbstractEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import lombok.*;
+import org.ramer.admin.entity.Constant;
 
-/** 系统数据字典 */
+/**
+ * 系统权限.
+ *
+ * @author ramer
+ * @see Constant.PrivilegeEnum
+ */
 @Entity(name = "privilege")
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class Privilege extends AbstractEntity {
-  /** 权限表达式. eg: global:view */
+  /** 权限表达式. eg: global:read */
   @Column(length = 100)
   private String exp;
 

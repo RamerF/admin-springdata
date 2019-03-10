@@ -32,7 +32,7 @@ public class ManageLogServiceImpl implements ManageLogService {
   }
 
   @Override
-  public ManageLog getById(long id) {
+  public ManageLog getById(final long id) {
     return repository.findById(id).orElse(null);
   }
 
@@ -42,7 +42,7 @@ public class ManageLogServiceImpl implements ManageLogService {
   }
 
   @Override
-  public Page<ManageLog> page(String criteria, int page, int size) {
+  public Page<ManageLog> page(String criteria, final int page, final int size) {
     final PageRequest pageable = pageRequest(page, size);
     if (pageable == null) {
       new PageImpl<>(Collections.emptyList());
@@ -68,7 +68,7 @@ public class ManageLogServiceImpl implements ManageLogService {
 
   @Transactional
   @Override
-  public synchronized void delete(long id) {
+  public synchronized void delete(final long id) {
     log.error(" ManageLogsServiceImpl.delete : not allowed");
     throw new CommonException("ManageLogsServiceImpl.delete : not allowed");
   }
