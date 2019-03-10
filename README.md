@@ -1,7 +1,7 @@
 # admin_springdata
 管理端框架,基于SpringBoot,SpringSecurity,SpringData,LayUi.
 
-[Demo](http://ramer.iok.la/manage/index)
+[演示 Demo](http://ramer.iok.la/manage/index)
 
 # 概览
 ![参数配置](http://pls25e6vd.bkt.clouddn.com/config.png)
