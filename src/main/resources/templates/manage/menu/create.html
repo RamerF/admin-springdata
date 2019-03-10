@@ -5,213 +5,196 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
       layout:decorate="~{manage/layout}">
 
-    <head>
-    </head>
+<head>
+</head>
 
-    <body>
-        <div layout:fragment="content">
-            <div class="x-body layui-anim layui-anim-up">
-                <form class="layui-form">
-                    <input th:if="${_csrf!=null}" type="hidden"
-                           th:name="${_csrf.parameterName}"
-                           id="_csrf"
-                           th:value="${_csrf.token}"/>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            <span class="x-red">*</span>栏目选择
-                        </label>
-                        <div class="layui-input-block">
-                            <select name="parentId" lay-verify="required">
-                                <option value="0">顶级菜单</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label for="L_name" class="layui-form-label">
-                            <span class="x-red">*</span>菜单名称
-                        </label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="L_name" name="name" required="true" lay-verify="name"
-                                   autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label for="L_sort" class="layui-form-label">
-                            <span class="x-red">*</span>权重
-                        </label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="L_sort" name="sort" required="true" lay-verify="sort"
-                                   autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            <span class="x-red">*</span>最终页面
-                        </label>
-                        <div class="layui-input-block">
-                            <input type="radio" name="leaf" value="true" title="true" checked="">
-                            <div class="layui-unselect layui-form-radio layui-form-radioed">
-                                <i
-                                        class="layui-anim layui-icon layui-anim-scaleSpring">
-                                </i>
-                                <div>true</div>
-                            </div>
-                            <input type="radio" name="leaf" value="false" title="false">
-                            <div class="layui-unselect layui-form-radio">
-                                <i class="layui-anim layui-icon"></i>
-                                <div>false</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label for="L_icon" class="layui-form-label">
-                            图标
-                        </label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="L_icon" name="icon" required="false" lay-verify="icon"
-                                   autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label for="L_url" class="layui-form-label">
-                            路径
-                        </label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="L_url" name="url" required="false" autocomplete="off"
-                                   class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label for="L_alia" class="layui-form-label">
-                            <span class="x-red">*</span>权限别名
-                        </label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="L_alia" name="alia" required="false" autocomplete="off"
-                                   class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label for="L_remark" class="layui-form-label">
-                            备注
-                        </label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="L_remark" name="remark" required="false" lay-verify="remark"
-                                   autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                        </label>
-                        <button class="layui-btn" lay-filter="add" lay-submit="">
-                            增加
-                        </button>
-                    </div>
-                </form>
+<body>
+<div layout:fragment="content">
+    <div class="x-body layui-anim layui-anim-up">
+        <form class="layui-form">
+            <input th:if="${_csrf!=null}" type="hidden"
+                   th:name="${_csrf.parameterName}"
+                   id="_csrf"
+                   th:value="${_csrf.token}"/>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>栏目选择
+                </label>
+                <div class="layui-input-block">
+                    <select name="parentId" lay-verify="required">
+                        <option value="0">顶级菜单</option>
+                    </select>
+                </div>
             </div>
-        </div>
-        <div layout:fragment="script">
-            <link rel="stylesheet" th:href="@{/style/manage/menu/menu.css}">
-            <script>
-              //获取菜单id
-              $.ajax({
-                url: '/manage/menu/list',
-                type: 'GET',
-                data: {
-                  'page': 1,
-                  'size': 999,
-                },
-                success: function(res) {
-                  for (var i = 0; i < (res.data.content).length; i++) {
-                    if (res.data.content[i].leaf == false) {
-                      $('.layui-form-item select').
-                      append('<option value=' + res.data.content[i].id + '>' + res.data.content[i].name + '</option>');
-                    }
-                  }
-                },
+            <div class="layui-form-item">
+                <label for="L_name" class="layui-form-label">
+                    <span class="x-red">*</span>菜单名称
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_name" name="name" required="true" lay-verify="name"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_sort" class="layui-form-label">
+                    <span class="x-red">*</span>权重
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_sort" name="sort" required="true" lay-verify="sort"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>最终页面
+                </label>
+                <div class="layui-input-block">
+                    <input type="radio" name="leaf" value="true" title="是" checked="">
+                    <div class="layui-unselect layui-form-radio layui-form-radioed">
+                        <i
+                                class="layui-anim layui-icon layui-anim-scaleSpring">
+                        </i>
+                        <div>是</div>
+                    </div>
+                    <input type="radio" name="leaf" value="false" title="否">
+                    <div class="layui-unselect layui-form-radio">
+                        <i class="layui-anim layui-icon"></i>
+                        <div>否</div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_icon" class="layui-form-label">
+                    图标
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_icon" name="icon" required="false" lay-verify="icon"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_url" class="layui-form-label">
+                    路径
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_url" name="url" required="false" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_alia" class="layui-form-label">
+                    <span class="x-red">*</span>权限别名
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_alia" name="alia" required="false" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_remark" class="layui-form-label">
+                    备注
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_remark" name="remark" required="false" lay-verify="remark"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                </label>
+                <button class="layui-btn" lay-filter="add" lay-submit="">
+                    增加
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<div layout:fragment="script">
+    <link rel="stylesheet" th:href="@{/style/manage/menu/menu.css}">
+    <script>
+      //获取菜单id
+      $.ajax({
+        url: '/manage/menu/list',
+        type: 'GET',
+        data: {
+          'page': 1,
+          'size': 999
+        },
+        success: function(res) {
+          for (var i = 0; i < (res.data.content).length; i++) {
+            if (res.data.content[i].leaf == false) {
+              $('.layui-form-item select').
+              append('<option value=' + res.data.content[i].id + '>' + res.data.content[i].name + '</option>');
+            }
+          }
+        }
 
-              });
-              layui.use(['form', 'layer'], function() {
-                $ = layui.jquery;
-                var form = layui.form
-                    , layer = layui.layer;
+      });
+      layui.use(['form', 'layer'], function() {
+        $ = layui.jquery;
+        var form = layui.form
+            , layer = layui.layer;
 
-                //自定义验证规则
-                form.verify({
-                  sort: function(value) {
-                    if (value.length < 1) {
-                      return '请输入序列';
-                    }
-                  },
-                  name: function(value) {
-                    if (value.length < 1) {
-                      return '请输入菜单名称';
-                    }
-                  },
-                  alia: function(value) {
-                    if (value.length < 1) {
-                      return '请输入权限别名';
-                    }
-                  },
-                  //, name: [/(.+){6,12}$/, '密码必须6到12位']
+        //自定义验证规则
+        form.verify({
+          sort: function(value) {
+            if (value.length < 1) {
+              return '请输入序列';
+            }
+          },
+          name: function(value) {
+            if (value.length < 1) {
+              return '请输入菜单名称';
+            }
+          },
+          alia: function(value) {
+            if (value.length < 1) {
+              return '请输入权限别名';
+            }
+          }
+          //, name: [/(.+){6,12}$/, '密码必须6到12位']
+        });
+
+        //监听提交
+        form.on('submit(add)', function(data) {
+          $('.layui-btn').attr('disabled', 'disabled');
+          $('.layui-btn').css('background', '#ccc');
+          data.field['_method'] = 'post';
+          var leaf = $('.layui-input-block input:radio:checked').val();
+          data.field['leaf'] = leaf;
+          var parentId = $('.layui-input-block option:selected').val();
+          data.field['parentId'] = parentId;
+          $.ajax({
+            url: '/manage/menu',
+            type: 'post',
+            data: data.field,
+            success: function(data) {
+              $('.layui-btn').removeAttr('disabled');
+              $('.layui-btn').css('background', '#009688');
+              if (data.result == true) {
+                //刷新表
+                window.parent.refresh();
+                layer.alert(data.msg, {icon: 1}, function() {
+
+                  $(this).blur();
+                  // 获得frame索引
+                  var index = parent.layer.getFrameIndex(window.name);
+                  //关闭当前frame
+                  parent.layer.close(index);
                 });
+              } else {
+                layer.alert(data.msg, {icon: 2});
+              }
+            }
 
-                //监听提交
-                form.on('submit(add)', function(data) {
-                  $('.layui-btn').attr('disabled','disabled');
-                  $('.layui-btn').css('background','#ccc');
-                  data.field['_method'] = 'post';
-                  var leaf = $('.layui-input-block input:radio:checked').val();
-                  data.field['leaf'] = leaf;
-                  var parentId = $('.layui-input-block option:selected').val();
-                  data.field['parentId'] = parentId;
-                  $.ajax({
-                    url: '/manage/menu',
-                    type: 'post',
-                    data: data.field,
-                    success: function(data) {
-                      $('.layui-btn').removeAttr('disabled');
-                      $('.layui-btn').css('background','#009688');
-                      if (data.result == true) {
-                        //刷新表
-                        window.parent.refresh();
-                        layer.alert(data.msg, {icon: 1}, function() {
+          });
 
-                          $(this).blur();
-                          // 获得frame索引
-                          var index = parent.layer.getFrameIndex(window.name);
-                          //关闭当前frame
-                          parent.layer.close(index);
-                        });
-                      } else {
-                        layer.alert(data.msg, {icon: 2});
-                      }
-                    },
+          return false;
+        });
 
-                  });
-
-                  return false;
-                });
-
-              });
-            </script>
-        </div>
-    </body>
+      });
+    </script>
+</div>
+</body>
 
 </html>
-<!--TODO: 错误
-    1.添加时name过长提示信息:
-    {
-      "result": false,
-      "data": null,
-      "msg": "提交信息有误: "
-    }
-
-    2.添加时url限制长度增加为100
-
-    3.添加时sort为字符串的时候：
-    {
-      "result": false,
-      "data": null,
-      "msg": "提交信息有误: "
-    }
--->
