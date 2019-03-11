@@ -5,6 +5,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.ramer.admin.entity.Constant.AccessPath;
 import org.ramer.admin.entity.domain.manage.DataDict;
 import org.ramer.admin.entity.pojo.manage.DataDictPoJo;
 import org.ramer.admin.entity.response.CommonResponse;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Controller
-@RequestMapping("/manage/dataDict")
+@RequestMapping(AccessPath.MANAGE + "/dataDict")
 @PreAuthorize("hasAnyAuthority('global:read','dataDict:read')")
 @Api(description = "管理端系统字典接口")
 @SuppressWarnings("UnusedDeclaration")

@@ -1,5 +1,11 @@
 package org.ramer.admin.controller.manage;
 
+import io.swagger.annotations.*;
+import java.util.Map;
+import javax.annotation.Resource;
+import javax.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
+import org.ramer.admin.entity.Constant.AccessPath;
 import org.ramer.admin.entity.domain.manage.Config;
 import org.ramer.admin.entity.pojo.manage.ConfigPoJo;
 import org.ramer.admin.entity.response.CommonResponse;
@@ -7,11 +13,6 @@ import org.ramer.admin.service.common.CommonService;
 import org.ramer.admin.service.manage.system.ConfigService;
 import org.ramer.admin.util.TextUtil;
 import org.ramer.admin.validator.ConfigValidator;
-import io.swagger.annotations.*;
-import java.util.Map;
-import javax.annotation.Resource;
-import javax.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @Controller
 @PreAuthorize("hasAnyAuthority('global:read','config:read')")
-@RequestMapping("/manage/config")
+@RequestMapping(AccessPath.MANAGE + "/config")
 @Api(description = "管理端系统参数接口")
 @SuppressWarnings("UnusedDeclaration")
 public class ConfigController {

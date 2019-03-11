@@ -18,7 +18,7 @@ public class Constant {
   public static final String SITE_COPYRIGHT = "SITE_COPYRIGHT";
   public static final String DEFAULT_CHARSET_ENCODE = "UTF-8";
 
-  // 返回结果码
+  // 三方调用返回结果码
   public enum ResultCode {
     E0000("成功"),
     E0001("认证码错误"),
@@ -46,6 +46,13 @@ public class Constant {
   public static final int ACTIVE_TRUE = 1;
   /** 不可登录 */
   public static final int ACTIVE_FALSE = 0;
+
+  /** 接口路径 */
+  public class AccessPath {
+    public static final String USER = "/user";
+    public static final String MANAGE = "/manage";
+  }
+
   // 静态资源路径
   public class ResourcePath {
     // 管理端

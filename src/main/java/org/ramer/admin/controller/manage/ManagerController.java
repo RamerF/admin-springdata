@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.ramer.admin.entity.AbstractEntity;
+import org.ramer.admin.entity.Constant.AccessPath;
 import org.ramer.admin.entity.domain.manage.Manager;
 import org.ramer.admin.entity.pojo.manage.ManagerPoJo;
 import org.ramer.admin.entity.response.CommonResponse;
@@ -33,7 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Controller
-@RequestMapping("/manage/manager")
+@RequestMapping(AccessPath.MANAGE + "/manager")
 @PreAuthorize("hasAnyAuthority('global:read','manager:read')")
 @Api(description = "管理端系统操作员接口")
 @SuppressWarnings("UnusedDeclaration")

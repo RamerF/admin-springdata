@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.ramer.admin.entity.AbstractEntity;
+import org.ramer.admin.entity.Constant.AccessPath;
 import org.ramer.admin.entity.domain.manage.Roles;
 import org.ramer.admin.entity.pojo.manage.RolesPoJo;
 import org.ramer.admin.entity.response.CommonResponse;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @Controller
 @PreAuthorize("hasAnyAuthority('global:read','roles:read')")
-@RequestMapping("/manage/roles")
+@RequestMapping(AccessPath.MANAGE + "/roles")
 @Api(description = "管理端系统角色接口")
 @SuppressWarnings("UnusedDeclaration")
 public class RolesController {

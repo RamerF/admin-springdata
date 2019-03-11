@@ -1,6 +1,12 @@
 package org.ramer.admin.controller.manage;
 
 import com.alibaba.fastjson.JSONObject;
+import io.swagger.annotations.*;
+import java.util.Map;
+import javax.annotation.Resource;
+import javax.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
+import org.ramer.admin.entity.Constant.AccessPath;
 import org.ramer.admin.entity.domain.manage.Menu;
 import org.ramer.admin.entity.pojo.manage.MenuPoJo;
 import org.ramer.admin.entity.response.CommonResponse;
@@ -8,11 +14,6 @@ import org.ramer.admin.service.common.CommonService;
 import org.ramer.admin.service.manage.system.MenuService;
 import org.ramer.admin.util.TextUtil;
 import org.ramer.admin.validator.MenuValidator;
-import io.swagger.annotations.*;
-import java.util.Map;
-import javax.annotation.Resource;
-import javax.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Controller
-@RequestMapping("/manage/menu")
+@RequestMapping(AccessPath.MANAGE + "/menu")
 @PreAuthorize("hasAnyAuthority('global:read','menu:read')")
 @Api(description = "管理端系统菜单接口")
 @SuppressWarnings("UnusedDeclaration")

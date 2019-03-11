@@ -77,7 +77,7 @@ public interface BaseService<T extends AbstractEntity, E extends AbstractEntityP
   @Transactional
   default <U extends AbstractEntityRequest> T update(
       Class<T> clazz, U u, String... includeNullProperties) throws CommonException {
-    T entity;
+    T domain;
     Long id;
     try {
       id =
@@ -85,18 +85,22 @@ public interface BaseService<T extends AbstractEntity, E extends AbstractEntityP
               Objects.requireNonNull(
                       BeanUtils.findDeclaredMethod(u.getClass(), "getId"), "getId方法不存在")
                   .invoke(u);
-      entity = getById(Objects.isNull(id) ? -1 : id);
-      entity = Objects.isNull(entity) ? clazz.newInstance() : entity;
+      domain = getById(Objects.isNull(id) ? -1 : id);
+      if (!Objects.isNull(id) && Objects.isNull(domain)) {
+        return null;
+      }
+      domain = Objects.isNull(domain) ? clazz.newInstance() : domain;
     } catch (Exception e) {
       return null;
     }
     BeanUtils.copyProperties(
         u,
-        entity,
+        domain,
         Stream.of(org.ramer.admin.util.BeanUtils.getNullPropertyNames(u))
             .filter(prop -> !Arrays.asList(includeNullProperties).contains(prop))
             .toArray(String[]::new));
-    return Objects.isNull(id) ? create(entity) : update(entity);
+    u.of(u, domain);
+    return Objects.isNull(id) ? create(domain) : update(domain);
   }
 
   T update(T t) throws CommonException;

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.ramer.admin.entity.Constant;
+import org.ramer.admin.entity.Constant.AccessPath;
 import org.ramer.admin.entity.domain.manage.ManageLog;
 import org.ramer.admin.entity.domain.manage.Manager;
 import org.ramer.admin.entity.response.CommonResponse;
@@ -25,7 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Controller("commonManage")
-@RequestMapping("/manage")
+@RequestMapping(AccessPath.MANAGE)
 @Api(description = "管理端通用接口")
 public class CommonController {
   @Resource private CommonService commonService;
