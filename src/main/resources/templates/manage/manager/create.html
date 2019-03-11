@@ -104,13 +104,13 @@
           empNo: [/(.+){5,25}$/, '工号必须5到25位字符之间'],
           password: [/^[a-zA-Z]\w{5,17}$/, '以字母开头，长度在6~18之间，只能包含字符、数字和下划线'],
           name: [/(.+){1,25}$/, '姓名必须5到25位字符之间'],
-          phone: [/(.+){8,11}$/, '电话号码必须8到11位字符之间'],
+          phone: [/(.+){8,11}$/, '电话号码必须8到11位字符之间']
         });
 
         //监听提交
         form.on('submit(add)', function(data) {
-          $('.layui-btn').attr('disabled','disabled');
-          $('.layui-btn').css('background','#ccc');
+          $('.layui-btn').attr('disabled', 'disabled');
+          $('.layui-btn').css('background', '#ccc');
           data.field['_method'] = 'post';
           var roleses = [];
           $.each($('.roleses input:checked'), function(index, val) {
@@ -123,10 +123,10 @@
             data: data.field,
             success: function(data) {
               $('.layui-btn').removeAttr('disabled');
-              $('.layui-btn').css('background','#009688');
+              $('.layui-btn').css('background', '#009688');
               if (data.result == true) {
                 //刷新表
-                $(".layui-btn").removeAttr('disabled');
+                $('.layui-btn').removeAttr('disabled');
                 window.parent.refresh();
                 layer.alert(data.msg, {icon: 1}, function() {
 
@@ -139,7 +139,7 @@
               } else {
                 layer.alert(data.msg, {icon: 2});
               }
-            },
+            }
 
           });
 

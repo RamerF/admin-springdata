@@ -64,7 +64,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">
                     性别
-                </label >
+                </label>
                 <div class="layui-input-block">
                     <input type="radio" name="gender" value="1" title="男"
                            th:checked="${manager.gender == 1?'checked':'false'}" th:id='${manager.gender}'>
@@ -138,13 +138,13 @@
             if (value.length < 1) {
               return '请选择性别';
             }
-          },
+          }
         });
 
         //监听提交
         form.on('submit(add)', function(data) {
-          $('.layui-btn').attr('disabled','disabled');
-          $('.layui-btn').css('background','#ccc');
+          $('.layui-btn').attr('disabled', 'disabled');
+          $('.layui-btn').css('background', '#ccc');
           data.field['_method'] = 'put';
           var gender = $('.layui-input-block input:radio:checked').val();
           data.field['gender'] = gender;
@@ -163,11 +163,11 @@
             data: data.field,
             success: function(data) {
               $('.layui-btn').removeAttr('disabled');
-              $('.layui-btn').css('background','#009688');
+              $('.layui-btn').css('background', '#009688');
               if (data.result == true) {
                 //刷新表
                 window.parent.refresh();
-                $(".layui-btn").removeAttr('disabled');
+                $('.layui-btn').removeAttr('disabled');
                 layer.alert(data.msg, {icon: 1}, function() {
                   // 获得frame索引
                   var index = parent.layer.getFrameIndex(window.name);
@@ -177,7 +177,7 @@
               } else {
                 layer.alert(data.msg, {icon: 2});
               }
-            },
+            }
           });
           return false;
         });
@@ -189,11 +189,3 @@
 </body>
 
 </html>
-<!--TODO: 错误
-    1.更新管理员的时候,性别为00或者0或者01或者1的时候会提示:
-    /* {
-    "result": false,
-    "data": null,
-    "msg": "更新失败,数据格式异常"
-    }
--->

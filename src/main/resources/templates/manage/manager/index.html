@@ -45,8 +45,7 @@
 
     <script>
       // 搜索
-      function search(obj)
-      {
+      function search(obj) {
         $('#table').bootstrapTable('refresh', {query: {'criteria': $(obj).prev().val()}});
       }
 
@@ -56,33 +55,29 @@
       });
 
       //刷新表
-      function refresh()
-      {
+      function refresh() {
         $('#table').bootstrapTable('refresh');
       }
 
       //添加参数
-      function create()
-      {
-        x_admin_show('添加', '/manage/manager', 600, 400);
+      function create() {
+        x_admin_show('添加', '/manage/manager', 600, 460);
       }
 
       //修改参数
-      function update()
-      {
-        if ($('#table').bootstrapTable('getSelections').length == 1) {
+      function update() {
+        if ($('#table').bootstrapTable('getSelections').length === 1) {
           x_admin_show('修改', '/manage/manager/' + $('#table').bootstrapTable('getSelections')[0].id, 600,
-              400);
+              460);
         } else {
           layer.msg('请选择一条需要修改的数据。', {icon: 2});
         }
       }
 
       //删除参数
-      function del(obj)
-      {
-        $(obj).attr('disabled','disabled');
-        $(obj).css('background','#ccc');
+      function del(obj) {
+        $(obj).attr('disabled', 'disabled');
+        $(obj).css('background', '#ccc');
         if ($('#table').bootstrapTable('getSelections').length == 1) {
           layer.confirm('确认要删除吗？', {icon: 3, title: '信息'}, function() {
             //发异步删除数据
@@ -92,7 +87,7 @@
               data: {'_method': 'delete', '_csrf': '[[${_csrf!=null?_csrf.token:null}]]'},
               success: function(data) {
                 $(obj).removeAttr('disabled');
-                $(obj).css('background','#009688');
+                $(obj).css('background', '#009688');
                 if (data.result == true) {
                   //刷新表
                   refresh();
@@ -100,14 +95,14 @@
                 } else {
                   layer.alert(data.msg, {icon: 2});
                 }
-              },
+              }
             });
 
           });
         } else {
           layer.msg('请选择一条需要删除的数据。', {icon: 2});
           $(obj).removeAttr('disabled');
-          $(obj).css('background','#009688');
+          $(obj).css('background', '#009688');
         }
 
       }
@@ -129,16 +124,16 @@
         pagination: true,//是否分页
         sidePagination: 'server',  // 设置为服务器端分页
         queryParams: function(params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
-          if ($('#name').val()==""){
+          if ($('#name').val() == '') {
             return {
               size: params.limit,//params.limit, // 每页要显示的数据条数
-              page: (params.offset / params.limit) + 1, // 当前页
+              page: (params.offset / params.limit) + 1 // 当前页
             };
-          }else {
+          } else {
             return {
-              criteria:$('#name').val(),
+              criteria: $('#name').val(),
               size: params.limit,//params.limit, // 每页要显示的数据条数
-              page: (params.offset / params.limit) + 1, // 当前页
+              page: (params.offset / params.limit) + 1 // 当前页
             };
           }
         },
@@ -146,23 +141,23 @@
            sortOrder: 'desc', // 排序规则 */
         columns: [
           {
-            checkbox: true,
+            checkbox: true
           }, {
             field: 'empNo',
             title: '工号',
             align: 'center',
-            valign: 'middle',
+            valign: 'middle'
           }, {
             field: 'name',
             title: '名称',
             align: 'center',
-            valign: 'middle',
+            valign: 'middle'
           }, {
             field: 'phone',
             title: '电话',
             align: 'center',
-            valign: 'middle',
-          },{
+            valign: 'middle'
+          }, {
             field: 'roleses',
             title: '管理员角色',
             align: 'center',
@@ -173,7 +168,7 @@
                 roles.push(value.name);
               });
               return roles;
-            },
+            }
           }
         ],
         responseHandler: function(res) {
@@ -189,19 +184,19 @@
         //单击选中
         onClickRow: function(row, $element) {
           $($element.children()[0]).children().click();
-        },
+        }
       });
       layui.use('laydate', function() {
         var laydate = layui.laydate;
 
         //执行一个laydate实例
         laydate.render({
-          elem: '#start', //指定元素
+          elem: '#start' //指定元素
         });
 
         //执行一个laydate实例
         laydate.render({
-          elem: '#end', //指定元素
+          elem: '#end' //指定元素
         });
       });
     </script>
