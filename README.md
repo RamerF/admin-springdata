@@ -11,13 +11,13 @@
 2. 启动项目
 3. 访问: [http://localhost:8080/manage](http://localhost:8080/manage) `账号: admin/admin`
 
-# 使用 `MainGenerator.java` 生成增删改查功能代码
-运行 `MainGenerator.java`:  
+# 生成增删改查功能代码
+运行 `MainGenerator.java`
 ```
-1. 请输入domain对象的包路径: 例如: org.ramer.demo.entity.domain.manage.Manager
-2. 请输入domain对象的class目录: 例如: D:\workspace\dnc\dnc-dao\target\classes
+1. 请输入domain对象的包路径: 例如: org.ramer.admin.entity.domain.manage.Manager
+2. 请输入domain对象的class目录: 例如: D:\workspace\admin-springdata\target\classes
     tip: 该路径是指编译输出路径,不包括包目录
-    (上述Manager.java文件编译后目录为:D:\workspace\dnc\dnc-dao\target\classes\org\ramer\demo\entity\domain\manage\Manager.class)
+    (上述Manager.java文件编译后目录为:D:\workspace\admin-springdata\target\classes\org\ramer\admin\entity\domain\manage\Manager.class)
 3. 请输入对象的别名: 例如: manager
     tip: 权限,变量名以及请求路径使用该变量
 4. 请输入对象的中文描述: 例如: 管理员
