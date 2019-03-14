@@ -1,6 +1,7 @@
 package org.ramer.admin.repository.manage;
 
 import org.ramer.admin.entity.domain.manage.DataDictType;
+import org.ramer.admin.repository.BaseRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository

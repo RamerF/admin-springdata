@@ -3,6 +3,7 @@ package org.ramer.admin.repository.manage;
 import org.ramer.admin.entity.domain.manage.Menu;
 import org.ramer.admin.entity.pojo.manage.MenuPoJo;
 import java.util.List;
+import org.ramer.admin.repository.BaseRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;

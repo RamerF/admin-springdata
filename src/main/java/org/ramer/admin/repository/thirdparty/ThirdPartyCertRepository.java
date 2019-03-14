@@ -1,7 +1,7 @@
 package org.ramer.admin.repository.thirdparty;
 
 import org.ramer.admin.entity.domain.thirdparty.ThirdPartyCertificate;
-import org.ramer.admin.repository.manage.BaseRepository;
+import org.ramer.admin.repository.BaseRepository;
 import org.springframework.stereotype.Repository;
 
 /**

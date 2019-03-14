@@ -2,6 +2,7 @@ package org.ramer.admin.repository.manage;
 
 import java.util.List;
 import org.ramer.admin.entity.domain.manage.DataDict;
+import org.ramer.admin.repository.BaseRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
