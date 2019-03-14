@@ -24,17 +24,12 @@ public class MainGenerator {
     System.out.println(
         "===================================================================================");
     System.out.println();
-    System.out.println(" 请输入domain对象的包路径: 例如: org.ramer.demo.entity.domain.manage.system.Manager");
-    Scanner scanner = new Scanner(System.in);
-    final String domainPath = scanner.next();
-    System.out.println(" 请输入domain对象的class目录: 例如: D:\\workspace\\dnc\\dnc-dao\\target\\classes");
-    final String classPath = scanner.next();
-    System.out.println(" 请输入对象的别名: 例如: manager");
-    final String aliaName = scanner.next();
-    System.out.println(" 请输入对象的中文描述: 例如: 管理员");
-    final String description = scanner.next();
-    System.out.println(" 复制到指定路径 ?(y/n)");
-    final String isCopy = scanner.next();
+
+    String classPath = null;
+    String domainPath = null;
+    String aliaName = null;
+    String description = null;
+    String isCopy = null;
 
     String savingPathRepository = null;
     String savingPathService = null;
@@ -45,28 +40,66 @@ public class MainGenerator {
     String savingPathRequest = null;
     String savingPathResponse = null;
 
-    while (!isCopy.equals("y") && !isCopy.equals("n")) {
-      System.out.println(" 输入有误,请重新输入(y/n)");
-    }
-    if (isCopy.equalsIgnoreCase("y")) {
-      System.out.println(" 请输入repository保存路径: 例如: D:\\workspace\\demo\\repository");
-      savingPathRepository = scanner.next();
-      System.out.println(" 请输入service保存路径: 例如: D:\\workspace\\demo\\service");
-      savingPathService = scanner.next();
-      savingPathServiceImpl =
-          Objects.isNull(savingPathService)
-              ? savingPathService
-              : savingPathService.concat("\\impl");
-      System.out.println(" 请输入controller保存路径: 例如: D:\\workspace\\demo\\controller");
-      savingPathController = scanner.next();
-      System.out.println(" 请输入validator保存路径: 例如: D:\\workspace\\demo\\validator");
-      savingPathValidator = scanner.next();
-      System.out.println(" 请输入pojo保存路径: 例如: D:\\workspace\\demo\\pojo");
-      savingPathPoJo = scanner.next();
-      System.out.println(" 请输入request保存路径: 例如: D:\\workspace\\demo\\request");
-      savingPathRequest = scanner.next();
-      System.out.println(" 请输入response保存路径: 例如: D:\\workspace\\demo\\response");
-      savingPathResponse = scanner.next();
+    // 读取配置文件信息
+    final String path =
+        MainGenerator.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+    Properties properties = new Properties();
+    final File configFile =
+        new File(path.substring(0, path.lastIndexOf("/")).concat("/config.ini"));
+    if (configFile.exists()) {
+      properties.load(new InputStreamReader(new FileInputStream(configFile), "GBK"));
+      classPath = properties.getProperty("classPath");
+      domainPath = properties.getProperty("domainPath");
+      aliaName = properties.getProperty("aliaName");
+      description = properties.getProperty("description");
+      isCopy = properties.getProperty("isCopy");
+      if (isCopy.equals("y")) {
+        savingPathRepository = properties.getProperty("savingPathRepository");
+        savingPathService = properties.getProperty("savingPathService");
+        savingPathServiceImpl = properties.getProperty("savingPathServiceImpl");
+        savingPathController = properties.getProperty("savingPathController");
+        savingPathValidator = properties.getProperty("savingPathValidator");
+        savingPathPoJo = properties.getProperty("savingPathPoJo");
+        savingPathRequest = properties.getProperty("savingPathRequest");
+        savingPathResponse = properties.getProperty("savingPathResponse");
+      }
+    } else {
+      System.out.println(
+          " 请输入domain对象的包路径: 例如: org.ramer.demo.entity.domain.manage.system.Manager");
+      Scanner scanner = new Scanner(System.in);
+      domainPath = scanner.next();
+      System.out.println(" 请输入domain对象的class目录: 例如: D:\\workspace\\dnc\\dnc-dao\\target\\classes");
+      classPath = scanner.next();
+      System.out.println(" 请输入对象的别名: 例如: manager");
+      aliaName = scanner.next();
+      System.out.println(" 请输入对象的中文描述: 例如: 管理员");
+      description = scanner.next();
+      System.out.println(" 复制到指定路径 ?(y/n)");
+      isCopy = scanner.next();
+
+      while (!isCopy.equals("y") && !isCopy.equals("n")) {
+        System.out.println(" 输入有误,请重新输入(y/n)");
+      }
+      if (isCopy.equalsIgnoreCase("y")) {
+        System.out.println(" 请输入repository保存路径: 例如: D:\\workspace\\demo\\repository");
+        savingPathRepository = scanner.next();
+        System.out.println(" 请输入service保存路径: 例如: D:\\workspace\\demo\\service");
+        savingPathService = scanner.next();
+        savingPathServiceImpl =
+            Objects.isNull(savingPathService)
+                ? savingPathService
+                : savingPathService.concat("\\impl");
+        System.out.println(" 请输入controller保存路径: 例如: D:\\workspace\\demo\\controller");
+        savingPathController = scanner.next();
+        System.out.println(" 请输入validator保存路径: 例如: D:\\workspace\\demo\\validator");
+        savingPathValidator = scanner.next();
+        System.out.println(" 请输入pojo保存路径: 例如: D:\\workspace\\demo\\pojo");
+        savingPathPoJo = scanner.next();
+        System.out.println(" 请输入request保存路径: 例如: D:\\workspace\\demo\\request");
+        savingPathRequest = scanner.next();
+        System.out.println(" 请输入response保存路径: 例如: D:\\workspace\\demo\\response");
+        savingPathResponse = scanner.next();
+      }
     }
 
     /** domain类名 */
@@ -245,7 +278,8 @@ public class MainGenerator {
   private static File copyTemplateFile(final String domainName, final String suffix)
       throws IOException {
     final InputStream inputStream =
-        ClassLoader.class.getResourceAsStream("/template/".concat(suffix).concat(".java"));
+        ClassLoader.class.getResourceAsStream(
+            "/generator-template/".concat(suffix).concat(".java"));
     final Path path = Files.createTempFile(domainName.concat(suffix), ".java");
     File file = path.toFile();
     file.deleteOnExit();
@@ -347,29 +381,36 @@ public class MainGenerator {
         Stream.of(clazz.getDeclaredFields())
             .filter(field -> Modifier.isPrivate(field.getModifiers()))
             .collect(Collectors.groupingBy(field -> field.getType().getName().contains("java.")));
+    // 引用对应的字段名
+    List<String> referenceNames = new ArrayList<>();
     Optional.ofNullable(collect.get(true))
         .orElseGet(ArrayList::new)
         .forEach(
             field -> {
-              if (field.getType().getName().contains("List"))
+              if (field.getType().getName().contains("List")) {
                 fieldBuilder
                     .append(lineSeparator)
                     .append("  private List<Long> ")
                     .append(field.getName())
                     .append("Ids;")
                     .append(lineSeparator);
-              else
+              } else {
+                final String simpleName = field.getType().getSimpleName();
                 fieldBuilder
                     .append(lineSeparator)
                     .append("  private ")
-                    .append(field.getType().getSimpleName())
+                    .append(simpleName)
                     .append(" ")
                     .append(field.getName())
                     .append(";")
                     .append(lineSeparator);
+                if (simpleName.equals("Long")) {
+                  referenceNames.add(field.getName());
+                }
+              }
             });
-    Optional.ofNullable(collect.get(false))
-        .orElseGet(ArrayList::new)
+    Optional.ofNullable(collect.get(false)).orElseGet(ArrayList::new).stream()
+        .filter(field -> !referenceNames.contains(field.getName()))
         .forEach(
             field ->
                 fieldBuilder
