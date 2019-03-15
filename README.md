@@ -12,7 +12,7 @@
 3. 访问: [http://localhost:8080/manage](http://localhost:8080/manage) `账号: admin/admin`
 
 # 生成增删改查功能代码
-运行 `MainGenerator.java`
+运行 `MainGenerator.java`,现在支持配置文件,参考config.ini
 ```
 1. 请输入domain对象的包路径: 例如: org.ramer.admin.entity.domain.manage.Manager
 2. 请输入domain对象的class目录: 例如: D:\workspace\admin-springdata\target\classes
