@@ -25,20 +25,19 @@ public class MainGenerator {
         "===================================================================================");
     System.out.println();
 
-    String classPath = null;
-    String domainPath = null;
-    String aliaName = null;
-    String description = null;
-    String isCopy = null;
-
-    String savingPathRepository = null;
-    String savingPathService = null;
-    String savingPathServiceImpl = null;
-    String savingPathController = null;
-    String savingPathValidator = null;
-    String savingPathPoJo = null;
-    String savingPathRequest = null;
-    String savingPathResponse = null;
+    String classPath,
+        domainPath,
+        aliaName,
+        description,
+        isCopy,
+        savingPathRepository = null,
+        savingPathService = null,
+        savingPathServiceImpl = null,
+        savingPathController = null,
+        savingPathValidator = null,
+        savingPathPoJo = null,
+        savingPathRequest = null,
+        savingPathResponse = null;
 
     // 读取配置文件信息
     final String path =
@@ -81,23 +80,30 @@ public class MainGenerator {
         System.out.println(" 输入有误,请重新输入(y/n)");
       }
       if (isCopy.equalsIgnoreCase("y")) {
-        System.out.println(" 请输入repository保存路径: 例如: D:/workspace/admin-springdata/src/main/java/org/ramer/admin/repository");
+        System.out.println(
+            " 请输入repository保存路径: 例如: D:/workspace/admin-springdata/src/main/java/org/ramer/admin/repository");
         savingPathRepository = scanner.next();
-        System.out.println(" 请输入service保存路径: D:/workspace/admin-springdata/src/main/java/org/ramer/admin/service");
+        System.out.println(
+            " 请输入service保存路径: D:/workspace/admin-springdata/src/main/java/org/ramer/admin/service");
         savingPathService = scanner.next();
         savingPathServiceImpl =
             Objects.isNull(savingPathService)
                 ? savingPathService
                 : savingPathService.concat("\\impl");
-        System.out.println(" 请输入controller保存路径: 例如: D:/workspace/admin-springdata/src/main/java/org/ramer/admin/controller");
+        System.out.println(
+            " 请输入controller保存路径: 例如: D:/workspace/admin-springdata/src/main/java/org/ramer/admin/controller");
         savingPathController = scanner.next();
-        System.out.println(" 请输入validator保存路径: 例如: D:/workspace/admin-springdata/src/main/java/org/ramer/admin/validator");
+        System.out.println(
+            " 请输入validator保存路径: 例如: D:/workspace/admin-springdata/src/main/java/org/ramer/admin/validator");
         savingPathValidator = scanner.next();
-        System.out.println(" 请输入pojo保存路径: 例如: D:/workspace/admin-springdata/src/main/java/org/ramer/admin/entity/pojo");
+        System.out.println(
+            " 请输入pojo保存路径: 例如: D:/workspace/admin-springdata/src/main/java/org/ramer/admin/entity/pojo");
         savingPathPoJo = scanner.next();
-        System.out.println(" 请输入request保存路径: 例如: D:/workspace/admin-springdata/src/main/java/org/ramer/admin/entity/request");
+        System.out.println(
+            " 请输入request保存路径: 例如: D:/workspace/admin-springdata/src/main/java/org/ramer/admin/entity/request");
         savingPathRequest = scanner.next();
-        System.out.println(" 请输入response保存路径: 例如: D:/workspace/admin-springdata/src/main/java/org/ramer/admin/entity/response");
+        System.out.println(
+            " 请输入response保存路径: 例如: D:/workspace/admin-springdata/src/main/java/org/ramer/admin/entity/response");
         savingPathResponse = scanner.next();
       }
     }
