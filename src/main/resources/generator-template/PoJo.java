@@ -3,6 +3,7 @@ package ${basePath}.entity.pojo${subDir};
 import ${basePath}.entity.domain.AbstractEntity;
 import ${basePath}.entity.domain${subDir}.${name};
 import ${basePath}.entity.pojo.AbstractEntityPoJo;
+import java.util.Objects;
 import java.util.Optional;
 import lombok.*;
 import org.springframework.beans.BeanUtils;

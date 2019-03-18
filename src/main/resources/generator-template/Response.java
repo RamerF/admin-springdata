@@ -2,7 +2,7 @@ package ${basePath}.entity.response${subDir};
 
 import ${basePath}.entity.domain.AbstractEntity;
 import ${basePath}.entity.domain${subDir}.${name};
-import ${basePath}.entity.pojo${subDir}.ProjectPoJo;
+import ${basePath}.entity.pojo${subDir}.${name}PoJo;
 import java.util.Optional;
 import lombok.*;
 import org.springframework.beans.BeanUtils;

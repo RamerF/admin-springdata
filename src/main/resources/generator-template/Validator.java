@@ -2,6 +2,7 @@ package ${basePath}.validator${subDir};
 
 import ${basePath}.entity.domain${subDir}.${name};
 import ${basePath}.entity.pojo${subDir}.${name}PoJo;
+import ${basePath}.entity.request${subDir}.${name}Request;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;

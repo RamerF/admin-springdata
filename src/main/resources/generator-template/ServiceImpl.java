@@ -4,6 +4,7 @@ import ${basePath}.entity.Constant;
 import ${basePath}.entity.domain${subDir}.${name};
 import ${basePath}.repository${subDir}.${name}Repository;
 import ${basePath}.service.common.BaseService;
+import ${basePath}.service${subDir}.${name}Service;
 import ${basePath}.util.TextUtil;
 import java.util.*;
 import javax.annotation.Resource;
@@ -28,8 +29,8 @@ public class ${name}ServiceImpl implements ${name}Service {
   }
 
   @Override
-  public long count(String criteria) {
-    return repository.count(getSpec(criteria));
+  public long count() {
+    return repository.count();
   }
 
   @Override

@@ -371,15 +371,13 @@ public class MainGenerator {
   }
 
   private static void buildField(
-      final String domainPath, final String classPath, final StringBuilder fieldBuilder)
-      throws ClassNotFoundException {
+      final String domainPath, final String classPath, final StringBuilder fieldBuilder) {
     Class clazz;
     try {
       clazz =
           new URLClassLoader(new URL[] {new File(classPath).toURI().toURL()}).loadClass(domainPath);
-    } catch (MalformedURLException e) {
-      System.err.println(
-          "=======================    class 文件不存在                     ====================");
+    } catch (MalformedURLException | ClassNotFoundException e) {
+      System.err.println("class 文件不存在: ".concat(domainPath));
       return;
     }
     final Map<Boolean, List<Field>> collect =
@@ -415,7 +413,7 @@ public class MainGenerator {
               }
             });
     Optional.ofNullable(collect.get(false)).orElseGet(ArrayList::new).stream()
-        .filter(field -> !referenceNames.contains(field.getName()))
+        .filter(field -> !referenceNames.contains(field.getName().concat("Id")))
         .forEach(
             field ->
                 fieldBuilder

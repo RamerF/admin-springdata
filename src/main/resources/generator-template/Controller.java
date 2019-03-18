@@ -3,6 +3,7 @@
 import ${basePath}.entity.Constant.AccessPath;
 import ${basePath}.entity.domain${subDir}.${name};
 import ${basePath}.entity.pojo${subDir}.${name}PoJo;
+import ${basePath}.entity.request${subDir}.${name}Request;
 import ${basePath}.entity.response.CommonResponse;
 import ${basePath}.service.common.CommonService;
 import ${basePath}.service${subDir}.${name}Service;
@@ -64,7 +65,7 @@ public class ${name}Controller {
   @PreAuthorize("hasAnyAuthority('global:create','${alia}:create')")
   @ApiOperation("添加${description}")
   ResponseEntity create(@Valid ${name}Request ${alia}Request, BindingResult bindingResult) throws Exception {
-    log.info(" ${name}Controller.create : [{}]", ${alia});
+    log.info(" ${name}Controller.create : [{}]", ${alia}Request);
     return commonService.create(service, ${name}.class, ${alia}Request, bindingResult);
   }
 
@@ -82,7 +83,7 @@ public class ${name}Controller {
   ResponseEntity update(
       @PathVariable("id") String idStr, @Valid ${name}Request ${alia}Request, BindingResult bindingResult)
       throws Exception {
-    log.info(" ${name}Controller.update : [{}]", ${alia});
+    log.info(" ${name}Controller.update : [{}]", ${alia}Request);
     return commonService.update(service, ${name}.class, ${alia}Request, bindingResult);
   }
 

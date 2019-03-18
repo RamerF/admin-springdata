@@ -1,5 +1,6 @@
 package ${basePath}.entity.request${subDir};
 
+import ${basePath}.entity.domain${subDir}.${name};
 import ${basePath}.entity.request.AbstractEntityRequest;
 import ${basePath}.entity.domain.AbstractEntity;
 import java.util.Objects;
