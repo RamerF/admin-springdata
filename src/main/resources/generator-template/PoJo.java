@@ -20,15 +20,17 @@ public class ${name}PoJo extends AbstractEntityPoJo {
 ${fieldList}
   @SuppressWarnings({"unchecked"})
   public <E extends AbstractEntity, T extends AbstractEntityPoJo> T of(E entity, Class<T> clazz) {
-    ${name} ${alia} = (${name}) entity;
-    ${name}PoJo poJo = null;
-    try {
-      poJo = (${name}PoJo) clazz.newInstance();
-    } catch (Exception e) {
+    if (Objects.isNull(entity)) {
       return null;
     }
-    BeanUtils.copyProperties(${alia}, poJo);
-    // TODO-WARN: 添加 Domain 转 PoJo 规则
+    ${name} obj = (${name}) entity;
+    ${name}PoJo poJo = (${name}PoJo) super.of(entity, clazz);
+    // TODO-WARN: 添加 Domain 转 PoJo 规则,对象转id
+    // 例如: poJo.setXxxId(Optional.ofNullable(obj.getXxx()).map(AbstractEntity::getId).orElse(null));
     return (T) poJo;
+  }
+
+  public static ${name}PoJo of(${name} entity) {
+    return new ${name}PoJo().of(entity, ${name}PoJo.class);
   }
 }
