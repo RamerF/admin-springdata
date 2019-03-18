@@ -18,6 +18,7 @@ import org.springframework.beans.BeanUtils;
 @EqualsAndHashCode(callSuper = true)
 public class ${name}PoJo extends AbstractEntityPoJo {
 ${fieldList}
+  @Override
   @SuppressWarnings({"unchecked"})
   public <E extends AbstractEntity, T extends AbstractEntityPoJo> T of(E entity, Class<T> clazz) {
     if (Objects.isNull(entity)) {
