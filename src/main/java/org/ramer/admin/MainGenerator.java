@@ -55,7 +55,8 @@ public class MainGenerator {
       if (isCopy.equals("y")) {
         savingPathRepository = properties.getProperty("savingPathRepository");
         savingPathService = properties.getProperty("savingPathService");
-        savingPathServiceImpl = properties.getProperty("savingPathServiceImpl");
+        savingPathServiceImpl =
+            Objects.isNull(savingPathService) ? null : savingPathService.concat("\\impl");
         savingPathController = properties.getProperty("savingPathController");
         savingPathValidator = properties.getProperty("savingPathValidator");
         savingPathPoJo = properties.getProperty("savingPathPoJo");
@@ -87,9 +88,7 @@ public class MainGenerator {
             " 请输入service保存路径: D:/workspace/admin-springdata/src/main/java/org/ramer/admin/service");
         savingPathService = scanner.next();
         savingPathServiceImpl =
-            Objects.isNull(savingPathService)
-                ? savingPathService
-                : savingPathService.concat("\\impl");
+            Objects.isNull(savingPathService) ? null : savingPathService.concat("\\impl");
         System.out.println(
             " 请输入controller保存路径: 例如: D:/workspace/admin-springdata/src/main/java/org/ramer/admin/controller");
         savingPathController = scanner.next();
