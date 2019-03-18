@@ -67,7 +67,30 @@ public interface CommonService {
           throws Exception;
 
   /**
-   * 创建或更新.
+   * 创建.
+   *
+   * @param invoke 服务层实现类.
+   * @param entity 要更新的request {@link AbstractEntityRequest} 对象.
+   * @param bindingResult 校验器校验结果.
+   * @param <T> 服务层实现类.
+   * @param <E> 要更新的对象.
+   * @return {@link ResponseEntity}
+   */
+  <
+          S extends BaseService<T, E>,
+          T extends AbstractEntity,
+          E extends AbstractEntityPoJo,
+          R extends AbstractEntityRequest>
+      ResponseEntity create(
+          final S invoke,
+          Class<T> clazz,
+          final R entity,
+          final BindingResult bindingResult,
+          String... includeNullProperties)
+          throws Exception;
+
+  /**
+   * 更新.
    *
    * @param invoke 服务层实现类.
    * @param entity 要更新的request {@link AbstractEntityRequest} 对象.

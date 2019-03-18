@@ -137,27 +137,29 @@ public class CommonServiceImpl implements CommonService {
           T extends AbstractEntity,
           E extends AbstractEntityPoJo,
           R extends AbstractEntityRequest>
+      ResponseEntity create(
+          final S invoke,
+          Class<T> clazz,
+          final R entity,
+          final BindingResult bindingResult,
+          String... includeNullProperties) {
+    return createOrUpdate(invoke, clazz, entity, bindingResult, true);
+  }
+
+  @Transactional
+  @Override
+  public <
+          S extends BaseService<T, E>,
+          T extends AbstractEntity,
+          E extends AbstractEntityPoJo,
+          R extends AbstractEntityRequest>
       ResponseEntity update(
           final S invoke,
           Class<T> clazz,
           final R entity,
           final BindingResult bindingResult,
           String... includeNullProperties) {
-    if (bindingResult.hasErrors()) {
-      return CommonResponse.fail(collectBindingResult(bindingResult));
-    }
-    try {
-      boolean doCreate =
-          Objects.isNull(
-              Objects.requireNonNull(BeanUtils.findDeclaredMethod(entity.getClass(), "getId"))
-                  .invoke(entity));
-      return Objects.isNull(invoke.update(clazz, entity, includeNullProperties))
-          ? CommonResponse.fail(doCreate ? "添加失败" : "更新失败,可能记录不存在")
-          : CommonResponse.ok(null, doCreate ? "添加成功" : "更新成功");
-    } catch (Exception e) {
-      log.warn(" CommonServiceImpl.update : [{}]", e.getMessage());
-      return CommonResponse.fail("操作失败,数据格式异常");
-    }
+    return createOrUpdate(invoke, clazz, entity, bindingResult, false);
   }
 
   @Override
@@ -201,5 +203,44 @@ public class CommonServiceImpl implements CommonService {
                             ? ((FieldError) error).getField() + " 格式不正确"
                             : error.getDefaultMessage()));
     return errorMsg.toString();
+  }
+  /**
+   * 创建或更新.
+   *
+   * @param invoke 服务层实现类.
+   * @param entity 要更新的request {@link AbstractEntityRequest} 对象.
+   * @param create 是否是创建.
+   * @param bindingResult 校验器校验结果.
+   * @param <T> 服务层实现类.
+   * @param <E> 要更新的对象.
+   * @return {@link ResponseEntity}
+   */
+  private <
+          S extends BaseService<T, E>,
+          T extends AbstractEntity,
+          E extends AbstractEntityPoJo,
+          R extends AbstractEntityRequest>
+      ResponseEntity createOrUpdate(
+          final S invoke,
+          Class<T> clazz,
+          final R entity,
+          final BindingResult bindingResult,
+          boolean create,
+          String... includeNullProperties) {
+    if (bindingResult.hasErrors()) {
+      return CommonResponse.fail(collectBindingResult(bindingResult));
+    }
+    try {
+      if (create) {
+        Objects.requireNonNull(BeanUtils.findDeclaredMethod(entity.getClass(), "setId", Long.class))
+            .invoke(entity, (Long) null);
+      }
+      return Objects.isNull(invoke.createOrUpdate(clazz, entity, includeNullProperties))
+          ? CommonResponse.fail(create ? "添加失败" : "更新失败,可能记录不存在")
+          : CommonResponse.ok(null, create ? "添加成功" : "更新成功");
+    } catch (Exception e) {
+      log.warn(" CommonServiceImpl.update : [{}]", e.getMessage());
+      return CommonResponse.fail("操作失败,数据格式异常");
+    }
   }
 }

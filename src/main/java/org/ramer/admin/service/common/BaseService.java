@@ -75,7 +75,7 @@ public interface BaseService<T extends AbstractEntity, E extends AbstractEntityP
    * @see SQLException
    */
   @Transactional
-  default <U extends AbstractEntityRequest> T update(
+  default <U extends AbstractEntityRequest> T createOrUpdate(
       Class<T> clazz, U u, String... includeNullProperties) throws CommonException {
     T domain;
     Long id;
