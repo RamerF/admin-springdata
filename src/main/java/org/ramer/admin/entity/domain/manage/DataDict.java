@@ -1,6 +1,7 @@
 package org.ramer.admin.entity.domain.manage;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.util.Objects;
 import javax.persistence.*;
 import lombok.*;
 import org.ramer.admin.entity.AbstractEntity;
@@ -27,7 +28,12 @@ public class DataDict extends AbstractEntity {
   @Column(length = 100)
   private String remark;
 
-  public DataDict(Long id) {
-    setId(id);
+  public static DataDict of(Long id) {
+    if (Objects.isNull(id)) {
+      return null;
+    }
+    final DataDict dataDict = new DataDict();
+    dataDict.setId(id);
+    return dataDict;
   }
 }

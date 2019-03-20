@@ -1,5 +1,6 @@
 package org.ramer.admin.entity.domain.manage;
 
+import java.util.Objects;
 import org.ramer.admin.entity.AbstractEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,7 +26,10 @@ public class Privilege extends AbstractEntity {
   @Column(length = 50)
   private String remark;
 
-  public static Privilege of(long id) {
+  public static Privilege of(Long id) {
+    if (Objects.isNull(id)) {
+      return null;
+    }
     final Privilege privilege = new Privilege();
     privilege.setId(id);
     return privilege;
