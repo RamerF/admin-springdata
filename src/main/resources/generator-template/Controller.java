@@ -39,14 +39,14 @@ public class ${name}Controller {
 
   @GetMapping("/index")
   @ApiOperation("${description}页面")
-  String index() {
+  public String index() {
     return "manage/${alia}/index";
   }
 
   @GetMapping("/list")
   @ResponseBody
   @ApiOperation("获取${description}列表")
-  ResponseEntity list(
+  public ResponseEntity list(
       @RequestParam("page") String pageStr,
       @RequestParam("size") String sizeStr,
       @ApiParam("查询条件") @RequestParam(value = "criteria", required = false) String criteria) {
@@ -56,7 +56,7 @@ public class ${name}Controller {
 
   @GetMapping
   @ApiOperation("添加${description}页面")
-  String create() {
+  public String create() {
     return "manage/${alia}/create";
   }
 
@@ -64,14 +64,14 @@ public class ${name}Controller {
   @ResponseBody
   @PreAuthorize("hasAnyAuthority('global:create','${alia}:create')")
   @ApiOperation("添加${description}")
-  ResponseEntity create(@Valid ${name}Request ${alia}Request, BindingResult bindingResult) throws Exception {
+  public ResponseEntity create(@Valid ${name}Request ${alia}Request, BindingResult bindingResult) throws Exception {
     log.info(" ${name}Controller.create : [{}]", ${alia}Request);
     return commonService.create(service, ${name}.class, ${alia}Request, bindingResult);
   }
 
   @GetMapping("/{id}")
   @ApiOperation("更新${description}页面")
-  String update(@PathVariable("id") String idStr, Map<String, Object> map) throws Exception {
+  public String update(@PathVariable("id") String idStr, Map<String, Object> map) throws Exception {
     return commonService.update(
         service, ${name}PoJo.class, idStr, "manage/${alia}/update", map, "${alia}");
   }
@@ -80,7 +80,7 @@ public class ${name}Controller {
   @ResponseBody
   @PreAuthorize("hasAnyAuthority('global:write','${alia}:write')")
   @ApiOperation("更新${description}")
-  ResponseEntity update(
+  public ResponseEntity update(
       @PathVariable("id") String idStr, @Valid ${name}Request ${alia}Request, BindingResult bindingResult)
       throws Exception {
     log.info(" ${name}Controller.update : [{}]", ${alia}Request);
@@ -91,7 +91,7 @@ public class ${name}Controller {
   @ResponseBody
   @PreAuthorize("hasAnyAuthority('global:delete','${alia}:delete')")
   @ApiOperation("删除${description}")
-  ResponseEntity delete(@PathVariable("id") String idStr) throws Exception {
+  public ResponseEntity delete(@PathVariable("id") String idStr) throws Exception {
     log.info(" ${name}Controller.delete : [{}]", idStr);
     return commonService.delete(service, idStr);
   }
