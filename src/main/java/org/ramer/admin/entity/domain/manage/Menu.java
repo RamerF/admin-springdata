@@ -1,5 +1,6 @@
 package org.ramer.admin.entity.domain.manage;
 
+import java.util.Objects;
 import org.ramer.admin.entity.AbstractEntity;
 import org.ramer.admin.entity.Constant;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -45,7 +46,10 @@ public class Menu extends AbstractEntity {
   @Column(length = 100)
   private String remark;
 
-  public static Menu of(long id) {
+  public static Menu of(Long id) {
+    if (Objects.isNull(id)) {
+      return null;
+    }
     final Menu menu = new Menu();
     menu.setId(id);
     return menu;

@@ -1,7 +1,6 @@
 package org.ramer.admin.entity.domain.manage;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import javax.persistence.*;
 import lombok.*;
 import org.ramer.admin.entity.AbstractEntity;
@@ -57,7 +56,12 @@ public class Manager extends AbstractEntity {
       inverseJoinColumns = {@JoinColumn(name = "roles_id")})
   private List<Roles> roleses;
 
-  public Manager(Long id) {
-    setId(id);
+  public static Manager of(Long id) {
+    if (Objects.isNull(id)) {
+      return null;
+    }
+    final Manager manager = new Manager();
+    manager.setId(id);
+    return manager;
   }
 }

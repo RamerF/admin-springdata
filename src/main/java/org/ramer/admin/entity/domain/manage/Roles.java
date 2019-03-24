@@ -1,12 +1,12 @@
 package org.ramer.admin.entity.domain.manage;
 
-import org.ramer.admin.entity.Constant;
-import org.ramer.admin.entity.AbstractEntity;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.*;
-import javax.persistence.Entity;
 import lombok.*;
 import org.hibernate.annotations.Where;
+import org.ramer.admin.entity.AbstractEntity;
+import org.ramer.admin.entity.Constant;
 
 /**
  * 管理员角色.
@@ -50,7 +50,12 @@ public class Roles extends AbstractEntity {
     this.name = name;
   }
 
-  public static Roles of(long id) {
-    return new Roles(id);
+  public static Roles of(Long id) {
+    if (Objects.isNull(id)) {
+      return null;
+    }
+    final Roles roles = new Roles();
+    roles.setId(id);
+    return roles;
   }
 }
