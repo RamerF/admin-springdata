@@ -46,7 +46,7 @@ public class MainGenerator {
     final File configFile =
         new File(path.substring(0, path.lastIndexOf("/")).concat("/config.ini"));
     if (configFile.exists()) {
-      properties.load(new InputStreamReader(new FileInputStream(configFile), "GBK"));
+      properties.load(new InputStreamReader(new FileInputStream(configFile), StandardCharsets.UTF_8));
       classPath = properties.getProperty("classPath");
       domainPath = properties.getProperty("domainPath");
       aliaName = properties.getProperty("aliaName");
