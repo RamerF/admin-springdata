@@ -12,7 +12,7 @@ import org.ramer.admin.entity.Constant.ResultCode;
 import org.ramer.admin.entity.domain.thirdparty.ThirdPartyCertificate;
 import org.ramer.admin.entity.domain.thirdparty.ThirdPartyLog;
 import org.ramer.admin.entity.response.thirdparty.ThirdPartyResponse;
-import org.ramer.admin.service.ThirdPartyCertService;
+import org.ramer.admin.service.thirdparty.ThirdPartyCertService;
 import org.ramer.admin.util.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
