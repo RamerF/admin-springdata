@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @Controller("${alia}c")
 @PreAuthorize("hasAnyAuthority('global:read','${alia}:read')")
-@RequestMapping( "/${alia}")
+@RequestMapping( "${subDirRequest}/${alia}")
 @Api(description = "${description}接口")
 @SuppressWarnings("UnusedDeclaration")
 public class ${name}Controller {
