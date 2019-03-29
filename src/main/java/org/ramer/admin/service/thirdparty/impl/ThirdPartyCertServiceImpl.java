@@ -1,4 +1,4 @@
-package org.ramer.admin.service.manage.system.impl;
+package org.ramer.admin.service.thirdparty.impl;
 
 import java.util.List;
 import org.ramer.admin.entity.Constant;
@@ -6,7 +6,7 @@ import org.ramer.admin.entity.domain.thirdparty.ThirdPartyCertificate;
 import org.ramer.admin.entity.domain.thirdparty.ThirdPartyLog;
 import org.ramer.admin.repository.thirdparty.ThirdPartyCertRepository;
 import org.ramer.admin.repository.thirdparty.ThirdPartyLogRepository;
-import org.ramer.admin.service.ThirdPartyCertService;
+import org.ramer.admin.service.thirdparty.ThirdPartyCertService;
 import org.ramer.admin.util.TextUtil;
 import javax.annotation.Resource;
 import javax.transaction.Transactional;

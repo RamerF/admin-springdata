@@ -1,4 +1,4 @@
-package org.ramer.admin.entity.pojo.manage;
+package org.ramer.admin.entity.pojo.thirdparty;
 
 import lombok.*;
 import org.ramer.admin.entity.pojo.AbstractEntityPoJo;

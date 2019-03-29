@@ -1,8 +1,8 @@
-package org.ramer.admin.service;
+package org.ramer.admin.service.thirdparty;
 
 import org.ramer.admin.entity.domain.thirdparty.ThirdPartyCertificate;
 import org.ramer.admin.entity.domain.thirdparty.ThirdPartyLog;
-import org.ramer.admin.entity.pojo.manage.ThirdPartyCertificatePoJo;
+import org.ramer.admin.entity.pojo.thirdparty.ThirdPartyCertificatePoJo;
 import org.ramer.admin.service.common.BaseService;
 
 /** @author ramer */

@@ -1,4 +1,4 @@
-package org.ramer.admin.service;
+package org.ramer.admin.service.common;
 
 /** @author ramer */
 public interface ThreadService {

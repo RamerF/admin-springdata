@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
       log.warn(exception.getMessage());
       ManageLog manageLogs = new ManageLog();
       manageLogs.setIp(IpUtils.getRealIP(request));
-      if (authentication.getName() != null) {
+      if (authentication != null && authentication.getName() != null) {
         manageLogs.setManager(managerService.getByEmpNo(authentication.getName()));
       }
       manageLogs.setUrl(request.getRequestURL().toString());

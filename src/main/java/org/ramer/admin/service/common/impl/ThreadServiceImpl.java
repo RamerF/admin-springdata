@@ -1,9 +1,9 @@
-package org.ramer.admin.service.manage.system.impl;
+package org.ramer.admin.service.common.impl;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import lombok.extern.slf4j.Slf4j;
-import org.ramer.admin.service.ThreadService;
+import org.ramer.admin.service.common.ThreadService;
 import org.springframework.stereotype.Service;
 
 /** @author ramer */
