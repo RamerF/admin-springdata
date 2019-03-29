@@ -12,7 +12,7 @@ public abstract class AbstractEntityRequest {
   private Long id;
 
   /**
-   * 将一些引用id转换成对应的引用.
+   * Request实体转换为Domain实体的额外处理.
    *
    * @param entity 业务请求实体 {@link AbstractEntityRequest}.
    * @param domain Domain实体 {@link AbstractEntity}.
