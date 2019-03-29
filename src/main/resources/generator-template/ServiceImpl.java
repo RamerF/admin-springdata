@@ -26,5 +26,4 @@ public class ${name}ServiceImpl implements ${name}Service {
   public <U extends BaseRepository<${name}, Long>> U getRepository() throws CommonException {
     return (U) repository;
   }
-
 }
