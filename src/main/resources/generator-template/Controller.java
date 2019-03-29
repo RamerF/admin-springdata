@@ -22,10 +22,10 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
-@Controller("${alia}mc")
+@Controller("${alia}c")
 @PreAuthorize("hasAnyAuthority('global:read','${alia}:read')")
 @RequestMapping( "/${alia}")
-@Api(description = "管理端${description}接口")
+@Api(description = "${description}接口")
 @SuppressWarnings("UnusedDeclaration")
 public class ${name}Controller {
   @Resource private ${name}Service service;
@@ -40,7 +40,7 @@ public class ${name}Controller {
   @GetMapping("/index")
   @ApiOperation("${description}页面")
   public String index() {
-    return "manage/${alia}/index";
+    return "${alia}/index";
   }
 
   @GetMapping("/list")
@@ -57,7 +57,7 @@ public class ${name}Controller {
   @GetMapping
   @ApiOperation("添加${description}页面")
   public String create() {
-    return "manage/${alia}/create";
+    return "${alia}/create";
   }
 
   @PostMapping
@@ -73,7 +73,7 @@ public class ${name}Controller {
   @ApiOperation("更新${description}页面")
   public String update(@PathVariable("id") String idStr, Map<String, Object> map) throws Exception {
     return commonService.update(
-        service, ${name}PoJo.class, idStr, "manage/${alia}/update", map, "${alia}");
+        service, ${name}PoJo.class, idStr, "${alia}/update", map, "${alia}");
   }
 
   @PutMapping("/{id}")
