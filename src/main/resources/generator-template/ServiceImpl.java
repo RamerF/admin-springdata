@@ -21,52 +21,10 @@ import org.springframework.util.StringUtils;
 public class ${name}ServiceImpl implements ${name}Service {
   @Resource private ${name}Repository repository;
 
-  @Transactional
+  @SuppressWarnings({"unchecked"})
   @Override
-  public synchronized ${name} create(${name} obj) {
-    textFilter(obj, obj);
-    return repository.saveAndFlush(obj);
-  }
-
-  @Override
-  public long count() {
-    return repository.count();
-  }
-
-  @Override
-  public ${name} getById(long id) {
-    return repository.findById(id).orElse(null);
-  }
-
-  @Override
-  public List<${name}> list(final String criteria) {
-    return page(criteria, -1, -1).getContent();
-  }
-
-  @Override
-  public Page<${name}> page(String criteria, int page, int size) {
-    final PageRequest pageable = pageRequest(page, size);
-    return pageable == null
-        ? new PageImpl<>(Collections.emptyList())
-        : repository.findAll(getSpec(criteria), pageable);
-  }
-
-  @Transactional
-  @Override
-  public synchronized ${name} update(${name} obj) {
-    return Optional.ofNullable(getById(obj.getId()))
-        .map(
-            o -> {
-              textFilter(obj, obj);
-              return repository.saveAndFlush(obj);
-            })
-        .orElse(null);
-  }
-
-  @Transactional
-  @Override
-  public synchronized void delete(long id) {
-    repository.deleteById(id);
+  public <U extends BaseRepository<${name}, Long>> U getRepository() throws CommonException {
+    return (U) repository;
   }
 
 }

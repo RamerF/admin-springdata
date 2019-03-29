@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
  *
  * @author ramer
  */
+@SuppressWarnings({"unused"})
 public class Constant {
 
   public static final String DEFAULT_CSRF_TOKEN = "X-CSRF-TOKEN";
@@ -107,9 +108,9 @@ public class Constant {
     /** 全局 */
     public static PrivilegeEnumEntity GLOBAL = new PrivilegeEnumEntity("global", "全局");
     /** 管理端 */
-    public static PrivilegeEnumEntity MANAGE = new PrivilegeEnumEntity("manage", "管理端");;
+    public static PrivilegeEnumEntity MANAGE = new PrivilegeEnumEntity("manage", "管理端");
     /** 用户端 */
-    public static PrivilegeEnumEntity USER = new PrivilegeEnumEntity("user", "用户端");;
+    public static PrivilegeEnumEntity USER = new PrivilegeEnumEntity("user", "用户端");
     /** 认证对象 */
     @AllArgsConstructor
     public static class PrivilegeEnumEntity {
@@ -135,5 +136,12 @@ public class Constant {
   public static class DataDictTypeCode {
     // 用于演示CODE
     public static final String DEMO_CODE = "DEMO_CODE";
+  }
+
+  /** 通用文本 */
+  public static class Txt {
+    public static final String ERROR_PARAM = "参数错误";
+    public static final String ERROR_SYSTEM = "系统繁忙，请稍后再试 ！";
+    public static final String NOT_IMPLEMENT = "方法未实现";
   }
 }

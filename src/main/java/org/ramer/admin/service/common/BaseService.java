@@ -6,9 +6,11 @@ import java.util.stream.Stream;
 import javax.transaction.Transactional;
 import org.ramer.admin.entity.AbstractEntity;
 import org.ramer.admin.entity.Constant;
+import org.ramer.admin.entity.Constant.Txt;
 import org.ramer.admin.entity.pojo.AbstractEntityPoJo;
 import org.ramer.admin.entity.request.AbstractEntityRequest;
 import org.ramer.admin.exception.CommonException;
+import org.ramer.admin.repository.BaseRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
@@ -21,14 +23,18 @@ import org.springframework.util.StringUtils;
  */
 public interface BaseService<T extends AbstractEntity, E extends AbstractEntityPoJo> {
 
-  T create(T t) throws CommonException;
+  default T create(T t) throws CommonException {
+    return getRepository().saveAndFlush(t);
+  }
 
   /**
    * 条件state={@code Constant.STATE_ON}的总记录数
    *
    * @return long
    */
-  long count();
+  default long count() {
+    return getRepository().count();
+  }
 
   /** 获取当前对象的POJO对象. */
   default E getPoJoById(final long id, Class<E> clazz) {
@@ -41,7 +47,9 @@ public interface BaseService<T extends AbstractEntity, E extends AbstractEntityP
     return Optional.ofNullable(getById(id)).map(e -> instance.of(e, clazz)).orElse(null);
   }
 
-  T getById(final long id);
+  default T getById(final long id) {
+    return getRepository().findById(id).orElse(null);
+  }
 
   /**
    * 条件查询.
@@ -49,7 +57,9 @@ public interface BaseService<T extends AbstractEntity, E extends AbstractEntityP
    * @param criteria 查询条件
    * @return {@link List <T>}
    */
-  List<T> list(String criteria);
+  default List<T> list(String criteria) {
+    return page(criteria, -1, -1).getContent();
+  }
 
   /**
    * 分页条件查询.
@@ -59,7 +69,12 @@ public interface BaseService<T extends AbstractEntity, E extends AbstractEntityP
    * @param size 每页条目
    * @return {@link Page<T>}
    */
-  Page<T> page(String criteria, final int page, final int size);
+  default Page<T> page(String criteria, final int page, final int size) {
+    final PageRequest pageable = pageRequest(page, size);
+    return pageable == null
+        ? new PageImpl<>(Collections.emptyList())
+        : getRepository().findAll(getSpec(criteria), pageable);
+  }
 
   /**
    * 保存/更新{@link U}对应的Domain对象.默认不会覆盖{@link U}中为null的字段,包含{@code
@@ -103,9 +118,15 @@ public interface BaseService<T extends AbstractEntity, E extends AbstractEntityP
     return Objects.isNull(id) ? create(domain) : update(domain);
   }
 
-  T update(T t) throws CommonException;
+  default T update(T t) throws CommonException {
+    return Optional.ofNullable(getById(t.getId()))
+        .map(o -> getRepository().saveAndFlush(o))
+        .orElse(null);
+  }
 
-  void delete(final long id) throws CommonException;
+  default void delete(final long id) throws CommonException {
+    getRepository().deleteById(id);
+  }
 
   /**
    * 过滤某些属性可能包含的特殊字符.
@@ -148,5 +169,9 @@ public interface BaseService<T extends AbstractEntity, E extends AbstractEntityP
     return page == -1
         ? PageRequest.of(0, Integer.MAX_VALUE, sort)
         : PageRequest.of(page - 1, size > 0 ? size : Constant.DEFAULT_PAGE_SIZE, sort);
+  }
+
+  default <U extends BaseRepository<T, Long>> U getRepository() throws CommonException {
+    throw new CommonException(Txt.NOT_IMPLEMENT);
   }
 }
