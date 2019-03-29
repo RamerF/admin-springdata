@@ -46,7 +46,8 @@ public class MainGenerator {
     final File configFile =
         new File(path.substring(0, path.lastIndexOf("/")).concat("/config.ini"));
     if (configFile.exists()) {
-      properties.load(new InputStreamReader(new FileInputStream(configFile), StandardCharsets.UTF_8));
+      properties.load(
+          new InputStreamReader(new FileInputStream(configFile), StandardCharsets.UTF_8));
       classPath = properties.getProperty("classPath");
       domainPath = properties.getProperty("domainPath");
       aliaName = properties.getProperty("aliaName");
@@ -107,9 +108,9 @@ public class MainGenerator {
       }
     }
 
-    /** domain类名 */
+    // domain类名
     final String domainName = domainPath.substring(domainPath.lastIndexOf(".") + 1);
-    /** 基础包路径 */
+    // 基础包路径
     final String packagePath = domainPath.substring(0, domainPath.indexOf(".entity"));
     final int subDirFrom = domainPath.indexOf("domain.") + 6;
     final int subDirTo = domainPath.indexOf(domainName) - 1;
@@ -296,7 +297,7 @@ public class MainGenerator {
     return file;
   }
 
-  private static StringBuilder loadFile(final File file, final FileReader fileReader) {
+  private static StringBuilder loadFile(final File file) {
     StringBuilder stringBuilder = new StringBuilder();
     String lineStr;
     try (FileInputStream fileInputStream = new FileInputStream(file);
@@ -323,8 +324,7 @@ public class MainGenerator {
       throws IOException {
     File file = copyTemplateFile(domainName, suffix);
     if (file == null) return;
-    final FileReader fileReader = new FileReader(file);
-    StringBuilder stringBuilder = loadFile(file, fileReader);
+    StringBuilder stringBuilder = loadFile(file);
     writeFile(
         packagePath,
         domainName,
@@ -334,7 +334,6 @@ public class MainGenerator {
         savingPath,
         suffix,
         file,
-        fileReader,
         stringBuilder,
         new StringBuilder());
   }
@@ -349,11 +348,10 @@ public class MainGenerator {
       final String classPath,
       final String savingPath,
       final String suffix)
-      throws IOException, ClassNotFoundException {
+      throws IOException {
     File file = copyTemplateFile(domainName, suffix);
     if (file == null) return;
-    final FileReader fileReader = new FileReader(file);
-    StringBuilder stringBuilder = loadFile(file, fileReader);
+    StringBuilder stringBuilder = loadFile(file);
     final StringBuilder fieldBuilder = new StringBuilder();
     buildField(domainPath, classPath, fieldBuilder);
     writeFile(
@@ -365,7 +363,6 @@ public class MainGenerator {
         savingPath,
         suffix,
         file,
-        fileReader,
         stringBuilder,
         fieldBuilder);
   }
@@ -434,7 +431,6 @@ public class MainGenerator {
       final String savingPath,
       final String suffix,
       final File file,
-      final FileReader fileReader,
       final StringBuilder stringBuilder,
       final StringBuilder fieldBuilder)
       throws IOException {
@@ -446,6 +442,7 @@ public class MainGenerator {
             .replace("${alia}", aliaName)
             .replace("${description}", description)
             .replace("${subDir}", subDir)
+            .replace("${subDirRequest}", subDir.replace(".", "/"))
             .replace("${fieldList}", fieldBuilder.toString());
     RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw");
     while (randomAccessFile.getFilePointer() < randomAccessFile.length()) {
