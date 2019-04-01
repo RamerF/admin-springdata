@@ -2,7 +2,7 @@ package ${basePath}.service${subDir}.impl;
 
 import ${basePath}.entity.Constant;
 import ${basePath}.entity.domain${subDir}.${name};
-import ${basePath}.CommonException;
+import ${basePath}.exception.CommonException;
 import ${basePath}.repository.BaseRepository;
 import ${basePath}.repository${subDir}.${name}Repository;
 import ${basePath}.service.common.BaseService;
