@@ -47,8 +47,8 @@ public class ${name}Controller {
   @ResponseBody
   @ApiOperation("获取${description}列表")
   public ResponseEntity list(
-      @RequestParam("page") String pageStr,
-      @RequestParam("size") String sizeStr,
+      @RequestParam(value = "page", required = false, defaultValue = "1") String pageStr,
+      @RequestParam(value = "size", required = false, defaultValue = "10") String sizeStr,
       @ApiParam("查询条件") @RequestParam(value = "criteria", required = false) String criteria) {
     final int[] pageAndSize = TextUtil.validFixPageAndSize(pageStr, sizeStr);
     return CommonResponse.ok(service.page(criteria, pageAndSize[0], pageAndSize[1]));
