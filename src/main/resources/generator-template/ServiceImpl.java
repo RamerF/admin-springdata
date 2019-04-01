@@ -2,6 +2,7 @@ package ${basePath}.service${subDir}.impl;
 
 import ${basePath}.entity.Constant;
 import ${basePath}.entity.domain${subDir}.${name};
+import ${basePath}.repository.BaseRepository;
 import ${basePath}.repository${subDir}.${name}Repository;
 import ${basePath}.service.common.BaseService;
 import ${basePath}.service${subDir}.${name}Service;
