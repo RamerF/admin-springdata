@@ -11,6 +11,8 @@ import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.ramer.admin.entity.AbstractEntity;
 import org.ramer.admin.entity.Constant;
+import org.ramer.admin.entity.Constant.SessionKey;
+import org.ramer.admin.entity.Constant.Txt;
 import org.ramer.admin.entity.domain.manage.Manager;
 import org.ramer.admin.entity.pojo.AbstractEntityPoJo;
 import org.ramer.admin.entity.pojo.manage.MenuPoJo;
@@ -28,6 +30,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
@@ -40,7 +43,7 @@ public class CommonServiceImpl implements CommonService {
 
   @Override
   public void writeMenuAndSiteInfo(HttpSession session, Map<String, Object> map) {
-    final Manager manager = (Manager) session.getAttribute("manager");
+    final Manager manager = (Manager) session.getAttribute(SessionKey.LOGIN_MANAGER);
     final Long managerId = manager.getId();
     final List<MenuPoJo> menuPoJos = menuService.listNameByManager(managerId);
     // 所有可用菜单
@@ -84,11 +87,14 @@ public class CommonServiceImpl implements CommonService {
     try {
       entity = invoke.create(entity);
       return entity == null
-          ? CommonResponse.fail("记录已存在")
-          : entity.getId() > 0 ? CommonResponse.ok(null) : CommonResponse.fail("添加失败");
+          ? CommonResponse.fail(Txt.FAIL_EXEC_ADD_EXIST)
+          : entity.getId() > 0
+              ? CommonResponse.ok(entity.getId())
+              : CommonResponse.fail(Txt.FAIL_EXEC_ADD);
     } catch (Exception e) {
       log.warn(" CommonServiceImpl.create : [{}]", e.getMessage());
-      return CommonResponse.fail("添加失败,数据格式异常");
+      return CommonResponse.fail(
+          StringUtils.isEmpty(e.getMessage()) ? Txt.FAIL_EXEC : e.getMessage());
     }
   }
 
@@ -123,11 +129,14 @@ public class CommonServiceImpl implements CommonService {
     try {
       entity = invoke.update(entity);
       return entity == null
-          ? CommonResponse.fail("记录不存在")
-          : entity.getId() > 0 ? CommonResponse.ok(null, "更新成功") : CommonResponse.fail("更新失败");
+          ? CommonResponse.fail(Txt.FAIL_EXEC_UPDATE_NOT_EXIST)
+          : entity.getId() > 0
+              ? CommonResponse.ok(entity.getId(), Txt.SUCCESS_EXEC_UPDATE)
+              : CommonResponse.fail(Txt.FAIL_EXEC_UPDATE);
     } catch (Exception e) {
       log.warn(" CommonServiceImpl.update : [{}]", e.getMessage());
-      return CommonResponse.fail("更新失败,数据格式异常");
+      return CommonResponse.fail(
+          StringUtils.isEmpty(e.getMessage()) ? Txt.FAIL_EXEC : e.getMessage());
     }
   }
 
@@ -173,10 +182,20 @@ public class CommonServiceImpl implements CommonService {
     try {
       invoke.delete(id);
     } catch (Exception e) {
-      log.warn(" ConfigController.delete : [{}]", e.getMessage());
-      return CommonResponse.fail("删除失败,数据格式异常");
+      log.warn(" CommonServiceImpl.delete : [{}]", e.getMessage());
+      return CommonResponse.fail(
+          StringUtils.isEmpty(e.getMessage()) ? Txt.FAIL_EXEC : e.getMessage());
     }
-    return CommonResponse.ok(null, "删除成功");
+    return CommonResponse.ok(null, Txt.SUCCESS_EXEC_DELETE);
+  }
+
+  @Override
+  public <T extends AbstractEntity, E> ResponseEntity list(
+      final List<T> lists, final Function<T, E> function, final Predicate<E> filterFunction) {
+    return CommonResponse.ok(
+        Objects.isNull(filterFunction)
+            ? lists.stream().map(function).collect(Collectors.toList())
+            : lists.stream().map(function).filter(filterFunction).collect(Collectors.toList()));
   }
 
   @Override
@@ -187,15 +206,6 @@ public class CommonServiceImpl implements CommonService {
             page.getContent().stream().map(function).collect(Collectors.toList()),
             page.getPageable(),
             page.getTotalElements()));
-  }
-
-  @Override
-  public <T extends AbstractEntity, E> ResponseEntity list(
-      final List<T> lists, final Function<T, E> function, final Predicate<E> filterFunction) {
-    return CommonResponse.ok(
-        Objects.isNull(filterFunction)
-            ? lists.stream().map(function).collect(Collectors.toList())
-            : lists.stream().map(function).filter(filterFunction).collect(Collectors.toList()));
   }
 
   @Override
@@ -245,12 +255,14 @@ public class CommonServiceImpl implements CommonService {
         Objects.requireNonNull(BeanUtils.findDeclaredMethod(entity.getClass(), "setId", Long.class))
             .invoke(entity, (Long) null);
       }
-      return Objects.isNull(invoke.createOrUpdate(clazz, entity, includeNullProperties))
-          ? CommonResponse.fail(create ? "添加失败" : "更新失败,可能记录不存在")
-          : CommonResponse.ok(null, create ? "添加成功" : "更新成功");
+      final T obj = invoke.createOrUpdate(clazz, entity, includeNullProperties);
+      return Objects.isNull(obj)
+          ? CommonResponse.fail(create ? Txt.FAIL_EXEC_ADD : Txt.FAIL_EXEC_UPDATE_NOT_EXIST)
+          : CommonResponse.ok(obj.getId(), create ? Txt.SUCCESS_EXEC_ADD : Txt.SUCCESS_EXEC_UPDATE);
     } catch (Exception e) {
       log.warn(" CommonServiceImpl.update : [{}]", e.getMessage());
-      return CommonResponse.fail("操作失败,数据格式异常");
+      return CommonResponse.fail(
+          StringUtils.isEmpty(e.getMessage()) ? Txt.FAIL_EXEC : e.getMessage());
     }
   }
 }

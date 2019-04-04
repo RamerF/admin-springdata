@@ -140,8 +140,28 @@ public class Constant {
 
   /** 通用文本 */
   public static class Txt {
+    // 操作成功提示文本
+    public static final String SUCCESS_EXEC = "操作成功";
+    public static final String SUCCESS_EXEC_ADD = "添加成功";
+    public static final String SUCCESS_EXEC_UPDATE = "更新成功";
+    public static final String SUCCESS_EXEC_DELETE = "删除成功";
+    // 操作失败提示文本
+    public static final String FAIL_EXEC = "操作失败,数据格式有误";
+    public static final String FAIL_EXEC_ADD = "添加失败,数据格式有误";
+    public static final String FAIL_EXEC_ADD_EXIST = "添加失败,数据已存在";
+    public static final String FAIL_EXEC_UPDATE = "更新失败,数据格式有误";
+    public static final String FAIL_EXEC_UPDATE_NOT_EXIST = "更新失败,记录不存在";
+    public static final String FAIL_EXEC_DELETE_NOT_EXIST = "删除失败";
+    // 系统异常提示文本
     public static final String ERROR_PARAM = "参数错误";
     public static final String ERROR_SYSTEM = "系统繁忙，请稍后再试 ！";
     public static final String NOT_IMPLEMENT = "方法未实现";
+  }
+  /** 存储在session中的key */
+  public class SessionKey {
+    // 前端登录对象
+    public static final String LOGIN_USER = "user";
+    // 管理端
+    public static final String LOGIN_MANAGER = "manager";
   }
 }
