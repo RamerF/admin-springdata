@@ -1,7 +1,9 @@
 package org.ramer.admin.service.common;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import javax.servlet.http.HttpSession;
 import org.ramer.admin.entity.AbstractEntity;
 import org.ramer.admin.entity.pojo.AbstractEntityPoJo;
@@ -123,6 +125,19 @@ public interface CommonService {
    */
   <S extends BaseService<T, E>, T extends AbstractEntity, E extends AbstractEntityPoJo>
       ResponseEntity delete(S invoke, String idStr) throws Exception;
+
+  /**
+   * 转换集合对象.将List domain对象转换为 List 任意对象,并封装为页面响应对象.
+   *
+   * @param lists List domain对象
+   * @param function 转换函数表达式
+   * @param filterFunction 过滤函数表达式
+   * @param <T> domain对象
+   * @param <E> 任意对象(通常是response|poJo对象)
+   * @return {@link ResponseEntity}
+   */
+  <T extends AbstractEntity, E> ResponseEntity list(
+      List<T> lists, final Function<T, E> function, final Predicate<E> filterFunction);
 
   /**
    * 转换分页对象.将Page domain对象转换为 Page 任意对象,并封装为页面响应对象.

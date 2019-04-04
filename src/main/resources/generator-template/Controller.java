@@ -51,7 +51,8 @@ public class ${name}Controller {
       @RequestParam(value = "size", required = false, defaultValue = "10") String sizeStr,
       @ApiParam("查询条件") @RequestParam(value = "criteria", required = false) String criteria) {
     final int[] pageAndSize = TextUtil.validFixPageAndSize(pageStr, sizeStr);
-    return CommonResponse.ok(service.page(criteria, pageAndSize[0], pageAndSize[1]));
+    return commonService.page(
+        service.page(criteria, pageAndSize[0], pageAndSize[1]), ${name}Response::of);
   }
 
   @GetMapping
@@ -66,14 +67,19 @@ public class ${name}Controller {
   @ApiOperation("添加${description}")
   public ResponseEntity create(@Valid ${name}Request ${alia}Request, BindingResult bindingResult) throws Exception {
     log.info(" ${name}Controller.create : [{}]", ${alia}Request);
-    return commonService.create(service, ${name}.class, ${alia}Request, bindingResult);
+    return commonService.create(
+        service, ${name}.class, ${alia}Request, bindingResult);
   }
 
   @GetMapping("/{id}")
   @ApiOperation("更新${description}页面")
   public String update(@PathVariable("id") String idStr, Map<String, Object> map) throws Exception {
     return commonService.update(
-        service, ${name}PoJo.class, idStr, "${alia}/update", map, "${alia}");
+        service,
+        ${name}PoJo.class,
+        idStr,
+        "${alia}/update",
+        map, "${alia}");
   }
 
   @PutMapping("/{id}")
@@ -84,7 +90,8 @@ public class ${name}Controller {
       @PathVariable("id") String idStr, @Valid ${name}Request ${alia}Request, BindingResult bindingResult)
       throws Exception {
     log.info(" ${name}Controller.update : [{}]", ${alia}Request);
-    return commonService.update(service, ${name}.class, ${alia}Request, bindingResult);
+    return commonService.update(
+        service, ${name}.class, ${alia}Request, bindingResult);
   }
 
   @DeleteMapping("/{id}")

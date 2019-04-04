@@ -3,6 +3,7 @@ package org.ramer.admin.service.common.impl;
 import com.alibaba.fastjson.JSONObject;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -186,6 +187,15 @@ public class CommonServiceImpl implements CommonService {
             page.getContent().stream().map(function).collect(Collectors.toList()),
             page.getPageable(),
             page.getTotalElements()));
+  }
+
+  @Override
+  public <T extends AbstractEntity, E> ResponseEntity list(
+      final List<T> lists, final Function<T, E> function, final Predicate<E> filterFunction) {
+    return CommonResponse.ok(
+        Objects.isNull(filterFunction)
+            ? lists.stream().map(function).collect(Collectors.toList())
+            : lists.stream().map(function).filter(filterFunction).collect(Collectors.toList()));
   }
 
   @Override

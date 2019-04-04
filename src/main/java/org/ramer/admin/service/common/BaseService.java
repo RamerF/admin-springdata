@@ -23,7 +23,8 @@ import org.springframework.util.StringUtils;
  */
 public interface BaseService<T extends AbstractEntity, E extends AbstractEntityPoJo> {
 
-  default T create(T t) throws CommonException {
+  @Transactional
+  default T create(T t) throws RuntimeException {
     return getRepository().saveAndFlush(t);
   }
 
@@ -91,7 +92,7 @@ public interface BaseService<T extends AbstractEntity, E extends AbstractEntityP
    */
   @Transactional
   default <U extends AbstractEntityRequest> T createOrUpdate(
-      Class<T> clazz, U u, String... includeNullProperties) throws CommonException {
+      Class<T> clazz, U u, String... includeNullProperties) throws RuntimeException {
     T domain;
     Long id;
     try {
@@ -118,13 +119,15 @@ public interface BaseService<T extends AbstractEntity, E extends AbstractEntityP
     return Objects.isNull(id) ? create(domain) : update(domain);
   }
 
-  default T update(T t) throws CommonException {
+  @Transactional
+  default T update(T t) throws RuntimeException {
     return Optional.ofNullable(getById(t.getId()))
         .map(o -> getRepository().saveAndFlush(o))
         .orElse(null);
   }
 
-  default void delete(final long id) throws CommonException {
+  @Transactional
+  default void delete(final long id) throws RuntimeException {
     getRepository().deleteById(id);
   }
 
@@ -171,7 +174,7 @@ public interface BaseService<T extends AbstractEntity, E extends AbstractEntityP
         : PageRequest.of(page - 1, size > 0 ? size : Constant.DEFAULT_PAGE_SIZE, sort);
   }
 
-  default <U extends BaseRepository<T, Long>> U getRepository() throws CommonException {
+  default <U extends BaseRepository<T, Long>> U getRepository() throws RuntimeException {
     throw new CommonException(Txt.NOT_IMPLEMENT);
   }
 }
