@@ -7,7 +7,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
-import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.ramer.admin.entity.AbstractEntity;
 import org.ramer.admin.entity.Constant;
@@ -29,13 +28,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 /** @author ramer */
-@Service("manageCommon")
+@Component("manageCommon")
 @Slf4j
 public class CommonServiceImpl implements CommonService {
   @Resource private MenuService menuService;
@@ -94,7 +93,10 @@ public class CommonServiceImpl implements CommonService {
     } catch (Exception e) {
       log.warn(" CommonServiceImpl.create : [{}]", e.getMessage());
       return CommonResponse.fail(
-          StringUtils.isEmpty(e.getMessage()) ? Txt.FAIL_EXEC : e.getMessage());
+          !StringUtils.isEmpty(e.getMessage())
+                  && (e instanceof CommonException || e instanceof NullPointerException)
+              ? e.getMessage()
+              : Txt.FAIL_EXEC);
     }
   }
 
@@ -136,11 +138,13 @@ public class CommonServiceImpl implements CommonService {
     } catch (Exception e) {
       log.warn(" CommonServiceImpl.update : [{}]", e.getMessage());
       return CommonResponse.fail(
-          StringUtils.isEmpty(e.getMessage()) ? Txt.FAIL_EXEC : e.getMessage());
+          !StringUtils.isEmpty(e.getMessage())
+                  && (e instanceof CommonException || e instanceof NullPointerException)
+              ? e.getMessage()
+              : Txt.FAIL_EXEC);
     }
   }
 
-  @Transactional
   @Override
   public <
           S extends BaseService<T, E>,
@@ -156,7 +160,6 @@ public class CommonServiceImpl implements CommonService {
     return createOrUpdate(invoke, clazz, entity, bindingResult, true);
   }
 
-  @Transactional
   @Override
   public <
           S extends BaseService<T, E>,
@@ -262,7 +265,10 @@ public class CommonServiceImpl implements CommonService {
     } catch (Exception e) {
       log.warn(" CommonServiceImpl.update : [{}]", e.getMessage());
       return CommonResponse.fail(
-          StringUtils.isEmpty(e.getMessage()) ? Txt.FAIL_EXEC : e.getMessage());
+          !StringUtils.isEmpty(e.getMessage())
+                  && (e instanceof CommonException || e instanceof NullPointerException)
+              ? e.getMessage()
+              : Txt.FAIL_EXEC);
     }
   }
 }
