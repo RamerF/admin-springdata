@@ -4,7 +4,7 @@ import ${basePath}.entity.Constant.AccessPath;
 import ${basePath}.entity.domain${subDir}.${name};
 import ${basePath}.entity.pojo${subDir}.${name}PoJo;
 import ${basePath}.entity.request${subDir}.${name}Request;
-import ${basePath}.entity.request${subDir}.${name}Response;
+import ${basePath}.entity.response${subDir}.${name}Response;
 import ${basePath}.entity.response.CommonResponse;
 import ${basePath}.service.common.CommonService;
 import ${basePath}.service${subDir}.${name}Service;
