@@ -4,6 +4,7 @@ import ${basePath}.entity.Constant.AccessPath;
 import ${basePath}.entity.domain${subDir}.${name};
 import ${basePath}.entity.pojo${subDir}.${name}PoJo;
 import ${basePath}.entity.request${subDir}.${name}Request;
+import ${basePath}.entity.request${subDir}.${name}Response;
 import ${basePath}.entity.response.CommonResponse;
 import ${basePath}.service.common.CommonService;
 import ${basePath}.service${subDir}.${name}Service;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller("${alia}c")
 @PreAuthorize("hasAnyAuthority('global:read','${alia}:read')")
 @RequestMapping( "${subDirRequest}/${alia}")
-@Api(description = "${description}接口")
+@Api(tags = "${description}接口")
 @SuppressWarnings("UnusedDeclaration")
 public class ${name}Controller {
   @Resource private ${name}Service service;
