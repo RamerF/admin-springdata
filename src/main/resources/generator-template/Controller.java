@@ -91,6 +91,11 @@ public class ${name}Controller {
       @PathVariable("id") String idStr, @Valid ${name}Request ${alia}Request, BindingResult bindingResult)
       throws Exception {
     log.info(" ${name}Controller.update : [{}]", ${alia}Request);
+    final long id = TextUtil.validLong(idStr, -1);
+    if (id < 1) {
+      return CommonResponse.wrongFormat("id");
+    }
+    ${alia}Request.setId(id);
     return commonService.update(
         service, ${name}.class, ${alia}Request, bindingResult);
   }
