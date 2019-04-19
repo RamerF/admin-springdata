@@ -110,7 +110,7 @@ public class CommonServiceImpl implements CommonService {
           Map<String, Object> map,
           String propName) {
     final long id = TextUtil.validLong(idStr, 0);
-    if (id <= 0) {
+    if (id < 1) {
       throw new CommonException("id 格式不正确");
     }
     map.put(propName, invoke.getPoJoById(id, clazz));
@@ -121,7 +121,7 @@ public class CommonServiceImpl implements CommonService {
   public <S extends BaseService<T, E>, T extends AbstractEntity, E extends AbstractEntityPoJo>
       ResponseEntity update(S invoke, T entity, String idStr, BindingResult bindingResult) {
     final long id = TextUtil.validLong(idStr, 0);
-    if (id <= 0) {
+    if (id < 1) {
       return CommonResponse.wrongFormat("id");
     }
     if (bindingResult.hasErrors()) {
@@ -179,7 +179,7 @@ public class CommonServiceImpl implements CommonService {
   public <S extends BaseService<T, E>, T extends AbstractEntity, E extends AbstractEntityPoJo>
       ResponseEntity delete(final S invoke, final String idStr) {
     long id = TextUtil.validLong(idStr, 0);
-    if (id <= 0) {
+    if (id < 1) {
       return CommonResponse.wrongFormat("id");
     }
     try {
