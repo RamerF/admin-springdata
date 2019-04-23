@@ -1,5 +1,6 @@
 package org.ramer.admin.entity.request;
 
+import java.io.Serializable;
 import javax.persistence.MappedSuperclass;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,9 @@ import org.ramer.admin.entity.AbstractEntity;
 @Data
 @MappedSuperclass
 @NoArgsConstructor
-public abstract class AbstractEntityRequest {
+public abstract class AbstractEntityRequest implements Serializable {
+  long serialVersionUID = 1L;
+
   private Long id;
 
   /**

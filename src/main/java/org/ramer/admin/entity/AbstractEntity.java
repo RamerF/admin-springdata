@@ -1,5 +1,6 @@
 package org.ramer.admin.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
 import lombok.Data;
@@ -11,8 +12,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Data
 @MappedSuperclass
 @NoArgsConstructor
-public abstract class AbstractEntity {
-  private static final long serialVersionUID = 1L;
+public abstract class AbstractEntity implements Serializable {
+  long serialVersionUID = 1L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

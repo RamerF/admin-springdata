@@ -1,5 +1,6 @@
 package org.ramer.admin.entity.pojo;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 import javax.persistence.MappedSuperclass;
@@ -11,7 +12,9 @@ import org.springframework.beans.BeanUtils;
 @Data
 @MappedSuperclass
 @NoArgsConstructor
-public abstract class AbstractEntityPoJo {
+public abstract class AbstractEntityPoJo implements Serializable {
+  long serialVersionUID = 1L;
+
   private Long id;
   private Integer state;
   private Date createTime;
