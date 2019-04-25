@@ -86,7 +86,7 @@ public class DataDictServiceImpl implements DataDictService {
   public Page<DataDict> page(final String criteria, final int page, final int size) {
     final PageRequest pageable = pageRequest(page, size);
     if (pageable == null) {
-      new PageImpl<>(Collections.emptyList());
+      return new PageImpl<>(Collections.emptyList());
     }
     return StringUtils.isEmpty(criteria)
         ? repository.findAll(pageable)

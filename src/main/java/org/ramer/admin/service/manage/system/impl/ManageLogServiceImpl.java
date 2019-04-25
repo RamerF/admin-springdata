@@ -45,7 +45,7 @@ public class ManageLogServiceImpl implements ManageLogService {
   public Page<ManageLog> page(String criteria, final int page, final int size) {
     final PageRequest pageable = pageRequest(page, size);
     if (pageable == null) {
-      new PageImpl<>(Collections.emptyList());
+      return new PageImpl<>(Collections.emptyList());
     }
     return StringUtils.isEmpty(criteria)
         ? repository.findAll(pageable)
