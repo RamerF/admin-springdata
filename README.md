@@ -1,7 +1,7 @@
 # admin_springdata
 管理端框架,基于SpringBoot,SpringSecurity,SpringData,LayUi.
 
-[演示1 Demo](http://ramer.tpddns.cn:8080/manage/index)
+[演示1 Demo](http://ramer.tpddns.cn:8000/manage/index)
 [演示2 Demo](http://ramer.tpddns.cn:9000/manage/index)
 
 # 概览
