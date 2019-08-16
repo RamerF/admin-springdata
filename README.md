@@ -1,6 +1,9 @@
 # admin_springdata
 管理端框架,基于SpringBoot,SpringSecurity,SpringData,LayUi.
 
+目前该项目已经停止维护,新的开发迁移到 [admin-template](https://github.com/RamerF/admin-template)
+
+
 [演示1 Demo](http://ramer.tpddns.cn:8000/manage/index)
 [演示2 Demo](http://ramer.tpddns.cn:9000/manage/index)
 
